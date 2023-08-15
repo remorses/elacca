@@ -6,7 +6,7 @@ import { PluginOptions as RpcPluginOptions } from './babelTransformPages'
 
 export type PluginOptions = {}
 
-export function withServerActions(config: PluginOptions = {}) {
+export function withElacca(config: PluginOptions = {}) {
     return (nextConfig: NextConfig = {}): NextConfig => {
         return {
             ...nextConfig,

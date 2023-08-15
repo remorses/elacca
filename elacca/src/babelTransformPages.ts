@@ -10,6 +10,7 @@ import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
 import fs from 'fs'
 import { default as nodePath, default as path } from 'path'
+import { defaultExportName, logger } from './utils'
 
 type Babel = { types: typeof types }
 
@@ -52,8 +53,6 @@ export function getConfigObject(
     }
     return null
 }
-
-const defaultExportName = 'DefaultExportRenamedByElacca'
 
 
 
