@@ -176,18 +176,29 @@ test('export named default', () => {
     expect(
         runPlugin(
             `
-        function SrcPagesId() {
-            return <p>Hello</p>;
-        };
-        export { SrcPagesId as default };
+            "skip ssr"
+            function SrcPagesId() {
+                return <p>Hello</p>;
+            };
+            export { SrcPagesId as default };
   `,
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "function SrcPagesId() {
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
+      function SrcPagesId() {
         return <p>Hello</p>;
       }
       ;
-      export default SrcPagesId;"
+      function DefaultExportRenamedByElacca() {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(SrcPagesId) : null;
+      }
+      export default DefaultExportRenamedByElacca;"
     `)
 })
