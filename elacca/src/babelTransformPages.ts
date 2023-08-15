@@ -235,6 +235,7 @@ function isEdgeInConfig(
 
 export interface PluginOptions {
     isServer: boolean
+    testing?: string
     pagesDir: string
     dev: boolean
     apiDir: string
@@ -243,13 +244,11 @@ export interface PluginOptions {
 
 export default function (
     { types: t }: Babel,
-    { apiDir, pagesDir, isServer, basePath }: PluginOptions,
+    { apiDir, pagesDir, isServer, testing, basePath }: PluginOptions,
 ): babel.PluginObj {
     return {
         visitor: {
             Program(program, state) {
-                const { testing } = (state.opts as any) || {}
-
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
 
