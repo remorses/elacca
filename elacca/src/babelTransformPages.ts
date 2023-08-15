@@ -101,7 +101,6 @@ function removeDefaultExport({
         types.isFunctionDeclaration(node.declaration) &&
         node.declaration.id
     ) {
-        defaultExportName = node.declaration.name
         defaultExportName = node.declaration.id.name
         if (isServer) {
             defaultDecl.remove()
