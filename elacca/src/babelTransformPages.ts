@@ -55,6 +55,8 @@ export function getConfigObject(
 
 const defaultExportName = 'DefaultExportRenamedByElacca'
 
+
+
 // https://github.com/blitz-js/babel-plugin-superjson-next/blob/main/src/index.ts#L121C22-L121C22
 function removeDefaultExport(path: NodePath<any>) {
     const { node } = path
@@ -69,14 +71,13 @@ function removeDefaultExport(path: NodePath<any>) {
         node.declaration.id
     ) {
         defaultExportName = node.declaration.name
-        // console.log(node.declaration.type)
         defaultExportName = node.declaration.id.name
         path.replaceInline(node.declaration)
     } else {
-        console.log(`ignored ${node.declaration.type}`)
+        logger.log(`ignored ${node.declaration.type}`)
     }
 
-    console.log({ defaultExportName })
+    logger.log({ defaultExportName })
     return defaultExportName
 }
 
@@ -87,7 +88,7 @@ function transformImportExportDefault(paths: NodePath<any>[]) {
     for (const path of paths) {
         if (types.isExportNamedDeclaration(path) as any) {
             for (const specifier of path.node.specifiers) {
-                console.log(specifier.exported.name)
+                logger.log(specifier.exported.name)
                 if (specifier.exported.name === 'default') {
                     path.insertAfter(
                         types.exportDefaultDeclaration(
@@ -143,7 +144,7 @@ export default function (
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
 
                 if (shouldBeSkipped(filePath)) {
-                    console.log('skipping because not a page', filePath)
+                    logger.log('skipping because not a page', filePath)
                     return
                 }
 
@@ -155,7 +156,7 @@ export default function (
                     isExportDefaultDeclaration(path),
                 )
                 if (!exportDefaultDeclaration) {
-                    console.log('no default export, skipping')
+                    logger.log('no default export, skipping')
                     return
                 }
 
@@ -164,7 +165,7 @@ export default function (
                         (x) => x.value?.value === 'skip ssr',
                     )
                 ) {
-                    console.log('no skip ssr, skipping')
+                    logger.log('no skip ssr, skipping')
                     return
                 }
 
@@ -172,7 +173,7 @@ export default function (
                     exportDefaultDeclaration,
                 )
                 if (!pageComponent) {
-                    console.log('no page component name found, skipping')
+                    logger.log('no page component name found, skipping')
                     return
                 }
 
