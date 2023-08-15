@@ -32,21 +32,10 @@ Full application example in the [example-app](./example-app) folder.
 // next.config.js
 const { withElacca } = require('elacca')
 
-const { withElacca } = require('elacca')
-
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-    enabled: !!process.env.ANAL,
-})
 
 /** @type {import('next').NextConfig} */
 const config = {
     reactStrictMode: false,
-
-    experimental: {
-        externalDir: true,
-        serverMinification: false,
-        serverActions: true,
-    },
 }
 
 const elacca = withElacca({})
