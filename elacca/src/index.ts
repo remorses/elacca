@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import type * as webpack from 'webpack';
 import { NextConfig } from 'next';
-import { PluginOptions as RpcPluginOptions } from './babelTransformRpc';
+import { PluginOptions as RpcPluginOptions } from './babelTransformPages';
 import { PluginOptions as ContextPluginOptions } from './babelTransformContext';
 import { WrapMethod } from './server';
 

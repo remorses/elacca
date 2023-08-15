@@ -1,6 +1,6 @@
 import { annotateAsPure } from './astUtils';
 import * as babel from '@babel/core';
-import { getConfigObject, isEdgeInConfig } from './babelTransformRpc';
+import { getConfigObject, isEdgeInConfig } from './babelTransformPages';
 
 type Babel = typeof babel;
 
