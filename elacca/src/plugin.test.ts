@@ -202,3 +202,53 @@ test('export named default', () => {
       export default DefaultExportRenamedByElacca;"
     `)
 })
+test('export named class', () => {
+    const opts = {
+        cwd: '/a/b/c',
+        filename: '/pages/index.tsx',
+    }
+    expect(
+        runPlugin(
+            `
+            "skip ssr"
+            export class Page extends React.Component {
+            }
+  `,
+            opts,
+        ).code,
+    ).toMatchInlineSnapshot(`
+      "\\"skip ssr\\";
+
+      export class Page extends React.Component {}"
+    `)
+})
+test('export class after', () => {
+    const opts = {
+        cwd: '/a/b/c',
+        filename: '/pages/index.tsx',
+    }
+    expect(
+        runPlugin(
+            `
+            "skip ssr"
+            class Page extends React.Component {
+            }
+            export default Page
+  `,
+            opts,
+        ).code,
+    ).toMatchInlineSnapshot(`
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
+      class Page extends React.Component {}
+      function DefaultExportRenamedByElacca() {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(Page) : null;
+      }
+      export default DefaultExportRenamedByElacca;"
+    `)
+})

@@ -197,12 +197,12 @@ export default function (
                     program.node.body.push(
                         parse(
                             dedent`
-                        function ${defaultExportName}() {
+                        function ${defaultExportName}(props) {
                             const [isMounted, setIsMounted] = ${reactImport.name}.useState(false)
                             ${reactImport.name}.useEffect(() => {
                                 setIsMounted(true)
                             }, [])
-                            return isMounted ? ${reactImport.name}.createElement(${pageComponent}) : null
+                            return isMounted ? ${reactImport.name}.createElement(${pageComponent}, props) : null
                         }
                         `,
                         ).program.body[0] as any,
