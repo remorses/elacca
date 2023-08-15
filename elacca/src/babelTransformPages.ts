@@ -1,34 +1,19 @@
-import { annotateAsPure, literalToAst } from './astUtils'
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
 
-import type { NodePath, PluginObj, PluginPass } from '@babel/core'
+import type { NodePath, PluginPass } from '@babel/core'
 
-import path from 'path'
-import nodePath from 'path'
-import fs from 'fs'
 import * as babel from '@babel/core'
-import * as types from '@babel/types'
-import { WrapMethodMeta } from './server'
-import { parse } from '@babel/parser'
 import generate from '@babel/generator'
+import { parse } from '@babel/parser'
+import * as types from '@babel/types'
 import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
+import fs from 'fs'
+import { default as nodePath, default as path } from 'path'
 
 type Babel = { types: typeof types }
-type BabelTypes = typeof babel.types
 
 const { name } = require('../package.json')
-const IMPORT_PATH_SERVER = `${name}/dist/server`
-const IMPORT_PATH_BROWSER = `${name}/dist/browser`
-
-function isAllowedTsExportDeclaration(
-    declaration: babel.NodePath<babel.types.Declaration | null | undefined>,
-): boolean {
-    return (
-        declaration.isTSTypeAliasDeclaration() ||
-        declaration.isTSInterfaceDeclaration()
-    )
-}
 
 function getConfigObjectExpression(
     variable: babel.NodePath<babel.types.VariableDeclarator>,
@@ -68,7 +53,6 @@ export function getConfigObject(
     return null
 }
 
-
 const defaultExportName = 'DefaultExportRenamedByElacca'
 
 // https://github.com/blitz-js/babel-plugin-superjson-next/blob/main/src/index.ts#L121C22-L121C22
@@ -94,34 +78,6 @@ function removeDefaultExport(path: NodePath<any>) {
 
     console.log({ defaultExportName })
     return defaultExportName
-
-    // if (
-    //     types.isFunctionDeclaration(node.declaration) ||
-    //     types.isClassDeclaration(node.declaration)
-    // ) {
-    //     if (node.declaration.id) {
-    //         // path.replaceInline(node.declaration)
-    //         // ;(path.parentPath as NodePath<types.Program>).pushContainer(
-    //         //     'body',
-    //         //     types.exportDefaultDeclaration(node.declaration.id) as any,
-    //         // )
-    //     } else {
-    //         node.declaration.id = types.identifier(defaultExportName)
-    //         if (types.isFunctionDeclaration(node.declaration)) {
-    //             node.declaration = functionDeclarationToExpression(
-    //                 node.declaration,
-    //             )
-    //         } else {
-    //             node.declaration = classDeclarationToExpression(
-    //                 node.declaration,
-    //             )
-    //         }
-    //     }
-    // } else {
-    //     // TODO handle other cases?
-    //     console.log(`ignored ${node.declaration.type}`)
-    //     node.declaration = node.declaration
-    // }
 }
 
 /**
@@ -167,60 +123,6 @@ function getFileName(state: PluginPass) {
     return filename
 }
 
-function functionDeclarationToExpression(
-    declaration: types.FunctionDeclaration,
-) {
-    return types.functionExpression(
-        declaration.id,
-        declaration.params,
-        declaration.body,
-        declaration.generator,
-        declaration.async,
-    )
-}
-
-function classDeclarationToExpression(declaration: types.ClassDeclaration) {
-    return types.classExpression(
-        declaration.id,
-        declaration.superClass,
-        declaration.body,
-        declaration.decorators,
-    )
-}
-
-function hasWrapMethod(code: string) {
-    return (
-        /export\s+function\s+wrapMethod\s*\(/m.test(code) ||
-        /export\s+(let|const)\s+wrapMethod\s*/m.test(code) ||
-        // https://regex101.com/r/nRaEVs/1
-        /export\s+\{[^}]*wrapMethod/m.test(code)
-    )
-}
-
-function isEdgeInConfig(
-    configObject: babel.NodePath<babel.types.ObjectExpression>,
-): boolean {
-    if (!configObject) {
-        return false
-    }
-    for (const property of configObject.get('properties')) {
-        if (!property.isObjectProperty()) {
-            continue
-        }
-        const key = property.get('key')
-        const value = property.get('value')
-
-        if (
-            property.isObjectProperty() &&
-            key.isIdentifier({ name: 'runtime' }) &&
-            value.isStringLiteral({ value: 'edge' })
-        ) {
-            return true
-        }
-    }
-    return false
-}
-
 export interface PluginOptions {
     isServer: boolean
     testing?: string
@@ -257,10 +159,9 @@ export default function (
                     return
                 }
 
-                console.log(program.directives)
                 if (
                     !program.node.directives?.find(
-                        (x) => x.value.value === 'skip ssr',
+                        (x) => x.value?.value === 'skip ssr',
                     )
                 ) {
                     console.log('no skip ssr, skipping')
