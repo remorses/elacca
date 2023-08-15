@@ -74,7 +74,7 @@ export default function Home() {
 -   On the client the page renders null until the component mounts, removing the need to hydrate the page
 -   This is implemented as a babel plugin that only runs on pages files, so your build should remain fast (all other files are not parsed by babel, usually the code inside the pages folder is not much)
 
-## Why the name
+## Why The Name
 
 From the [Dune wiki](https://dune.fandom.com/wiki/Elacca_drug):
 
