@@ -49,7 +49,7 @@ export function withElacca(config: PluginOptions = {}) {
                                         ),
                                         { isTSX: true },
                                     ],
-                                ],
+                                ].filter(Boolean),
                             },
                         },
                     ],

@@ -32,6 +32,9 @@ importers:
       '@babel/core':
         specifier: ^7.22.9
         version: 7.22.9
+      '@babel/helper-annotate-as-pure':
+        specifier: ^7.22.5
+        version: 7.22.5
       '@babel/helper-module-imports':
         specifier: ^7.22.5
         version: 7.22.5
@@ -39,6 +42,9 @@ importers:
         specifier: ^7.22.7
         version: 7.22.7
       '@babel/plugin-syntax-typescript':
+        specifier: ^7.22.5
+        version: 7.22.5(@babel/core@7.22.9)
+      '@babel/plugin-transform-react-pure-annotations':
         specifier: ^7.22.5
         version: 7.22.5(@babel/core@7.22.9)
       babel-loader:
@@ -195,7 +201,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.22.10
-    dev: true
 
   /@babel/helper-compilation-targets@7.22.10:
     resolution: {integrity: sha512-JMSwHD4J7SLod0idLq5PKgI+6g/hLD/iuWBq08ZX49xE14VpVEojJ5rHWptpirV2j020MvypRLAXAO50igCJ5Q==}
@@ -367,7 +372,6 @@ packages:
       '@babel/core': 7.22.9
       '@babel/helper-annotate-as-pure': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
-    dev: true
 
   /@babel/preset-react@7.22.5(@babel/core@7.22.9):
     resolution: {integrity: sha512-M+Is3WikOpEJHgR385HbuCITPTaPRaNkibTEa9oiofmJvIsrceb4yp9RL9Kb+TE8LznmeyZqpP+Lopwcx59xPQ==}

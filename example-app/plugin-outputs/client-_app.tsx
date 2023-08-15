@@ -7,9 +7,7 @@ function MyApp({
   Component,
   pageProps
 }: AppProps) {
-  return <ChakraProvider>
-            <Component {...pageProps} />
-        </ChakraProvider>;
+  return <Component {...pageProps} />;
 }
 function DefaultExportRenamedByElacca(props) {
   const [isMounted, setIsMounted] = _default.useState(false);
