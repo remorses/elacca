@@ -39,7 +39,7 @@ function runPlugin(
         ...opts,
     })?.code
 
-    return [client, server].map((x) =>
+    return [server, client].map((x) =>
         synchronizedPrettier.format(x || '', { parser: 'acorn' }),
     )
 }
@@ -62,6 +62,11 @@ test('normal arrow function, export default later', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
@@ -72,11 +77,6 @@ test('normal arrow function, export default later', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
@@ -103,6 +103,12 @@ test('normal arrow function, already imports react', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "import React from \\"react\\";
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       import React from \\"react\\";
       const SrcPagesId = () => {
@@ -114,12 +120,6 @@ test('normal arrow function, already imports react', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "import React from \\"react\\";
-      function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
@@ -144,6 +144,11 @@ test('function declaration, export later', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
@@ -154,11 +159,6 @@ test('function declaration, export later', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
@@ -182,6 +182,11 @@ test('export default function declaration', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
@@ -192,11 +197,6 @@ test('export default function declaration', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
@@ -221,6 +221,11 @@ test('export named default', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
@@ -231,11 +236,6 @@ test('export named default', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
@@ -282,6 +282,12 @@ test('export class after', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
+        "class Page extends React.Component {}
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
         "import _default from \\"react\\";
       class Page extends React.Component {}
       function DefaultExportRenamedByElacca(props) {
@@ -290,12 +296,6 @@ test('export class after', () => {
           setIsMounted(true);
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "class Page extends React.Component {}
-      function DefaultExportRenamedByElacca() {
-        return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
