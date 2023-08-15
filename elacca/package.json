@@ -3,17 +3,15 @@
     "version": "0.0.0",
     "description": "",
     "main": "dist/index.js",
-    "module": "esm/index.js",
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/remorses/",
+    "repository": "https://github.com/remorses/elacca",
     "scripts": {
         "build": "tsc && tsc -m es6 --outDir esm",
         "watch": "tsc -w"
     },
     "files": [
         "dist",
-        "src",
-        "esm"
+        "src"
     ],
     "keywords": [],
     "author": "Tommaso De Rossi, morse <beats.by.morse@gmail.com>",
