@@ -3,24 +3,26 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "DEBUG_ACTIONS_BABEL_PLUGIN=1 next dev",
-        "build": "DEBUG_ACTIONS_BABEL_PLUGIN=1 next build",
+        "dev": "DEBUG_ELACCA=1 next dev -p 3434",
+        "build": "ANAL=true DEBUG_ELACCA=1 next build",
         "start": "next start",
         "lint": "next lint"
     },
     "dependencies": {
+        "@chakra-ui/react": "^2.8.0",
         "@motionone/dom": "^10.16.2",
+        "@next/bundle-analyzer": "^13.4.16",
         "@types/node": "20.2.5",
         "@types/react": "18.2.9",
         "@types/react-dom": "18.2.4",
         "autoprefixer": "10.4.14",
+        "elacca": "workspace:*",
         "next": "13.4.12",
         "popmotion": "^11.0.5",
         "postcss": "8.4.24",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-server-dom-webpack": "^0.0.1",
-        "elacca": "workspace:*",
         "tailwindcss": "3.3.2",
         "typescript": "^5.1.3"
     }

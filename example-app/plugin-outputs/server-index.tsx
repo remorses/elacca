@@ -1,11 +1,13 @@
-'skip ssr'
-import { Checkbox, Select } from '@chakra-ui/react'
-import { ChakraProvider } from '@chakra-ui/react'
-import React from 'react'
+'skip ssr';
 
-export default function HeavyComponent({ hello }) {
-    return (
-        <div className='w-[600px]'>
+import _default from "react";
+import { Checkbox, Select } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
+function HeavyComponent({
+  hello
+}) {
+  return <div className='w-[600px]'>
             <div className=''>
                 <Select placeholder='Select option'>
                     <option value='option1'>Option 1</option>
@@ -17,14 +19,16 @@ export default function HeavyComponent({ hello }) {
                 <Checkbox defaultChecked>Checkbox</Checkbox>
             </div>
             <h1>Heavy Component {hello}</h1>
-        </div>
-    )
+        </div>;
 }
-
 export function getServerSideProps() {
-    return {
-        props: {
-            hello: 'world',
-        },
+  return {
+    props: {
+      hello: 'world'
     }
+  };
 }
+function DefaultExportRenamedByElacca() {
+  return null;
+}
+export default DefaultExportRenamedByElacca;

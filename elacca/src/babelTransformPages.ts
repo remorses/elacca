@@ -54,8 +54,6 @@ export function getConfigObject(
     return null
 }
 
-
-
 // https://github.com/blitz-js/babel-plugin-superjson-next/blob/main/src/index.ts#L121C22-L121C22
 function removeDefaultExport(path: NodePath<any>) {
     const { node } = path
@@ -164,7 +162,7 @@ export default function (
                         (x) => x.value?.value === 'skip ssr',
                     )
                 ) {
-                    logger.log('no skip ssr, skipping')
+                    logger.log('no "skip ssr" directive, skipping')
                     return
                 }
 
@@ -186,7 +184,7 @@ export default function (
 
                 // add a `export default renamedPage` at the end
                 if (isServer) {
-                    program.node.body.push(
+                    program.node.body?.push(
                         parse(dedent`
                         function ${defaultExportName}() {
                             return null
@@ -194,7 +192,7 @@ export default function (
                     `).program.body[0] as any,
                     )
                 } else {
-                    program.node.body.push(
+                    program.node.body?.push(
                         parse(
                             dedent`
                         function ${defaultExportName}(props) {
@@ -209,13 +207,13 @@ export default function (
                     )
                 }
 
-                program.node.body.push(
+                program.node.body?.push(
                     types.exportDefaultDeclaration(
                         types.identifier(defaultExportName),
                     ),
                 )
 
-                if (process.env.DEBUG_ACTIONS_BABEL_PLUGIN) {
+                if (process.env.DEBUG_ELACCA) {
                     // stringify the AST and print it
                     const output = generate(
                         program.node,
@@ -225,12 +223,12 @@ export default function (
                         // @ts-expect-error
                         this.file.code,
                     )
-                    let p = program.resolve(
+                    let p = path.resolve(
                         './plugin-outputs',
                         (isServer ? 'server-' : 'client-') +
-                            program.basename(filePath),
+                            path.basename(filePath),
                     )
-                    fs.mkdirSync(program.dirname(p), { recursive: true })
+                    fs.mkdirSync(path.dirname(p), { recursive: true })
                     fs.writeFileSync(p, output.code)
                 }
             },
@@ -239,7 +237,7 @@ export default function (
 }
 
 const filesToSkip = ([] as string[]).concat(
-    ...['_app', '_document', '_error'].map((name) => [
+    ...['_document', '_error'].map((name) => [
         name + '.js',
         name + '.jsx',
         name + '.ts',
