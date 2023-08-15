@@ -3,7 +3,7 @@
     <br/>
     <br/>
     <h3>elacca</h3>
-    <p></p>
+    <p>Improve your Next.js app cold start time by 10x</p>
     <br/>
     <br/>
 </div>
