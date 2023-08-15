@@ -105,32 +105,32 @@ test('normal arrow function, already imports react', () => {
             opts,
         ),
     ).toMatchInlineSnapshot(`
-      [
-        "import _default from \\"react\\";
-      import React from \\"react\\";
-      const SrcPagesId = () => {
-        return <p>Hello</p>;
-      };
-      function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-        "import React from \\"react\\";
-      const SrcPagesId = () => {
-        return <p>Hello</p>;
-      };
-      function DefaultExportRenamedByElacca() {
-        return null;
-      }
-      export default DefaultExportRenamedByElacca;
-      ",
-      ]
-    `)
+              [
+                "import _default from \\"react\\";
+              import React from \\"react\\";
+              const SrcPagesId = () => {
+                return <p>Hello</p>;
+              };
+              function DefaultExportRenamedByElacca(props) {
+                const [isMounted, setIsMounted] = _default.useState(false);
+                _default.useEffect(() => {
+                  setIsMounted(true);
+                }, []);
+                return isMounted ? _default.createElement(SrcPagesId, props) : null;
+              }
+              export default DefaultExportRenamedByElacca;
+              ",
+                "import React from \\"react\\";
+              const SrcPagesId = () => {
+                return <p>Hello</p>;
+              };
+              function DefaultExportRenamedByElacca() {
+                return null;
+              }
+              export default DefaultExportRenamedByElacca;
+              ",
+              ]
+            `)
 })
 test('function declaration, export later', () => {
     const opts = {
@@ -163,10 +163,7 @@ test('function declaration, export later', () => {
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "function SrcPagesId() {
-        return <p>Hello</p>;
-      }
-      function DefaultExportRenamedByElacca() {
+        "function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
@@ -229,30 +226,27 @@ test('export named default', () => {
             opts,
         ),
     ).toMatchInlineSnapshot(`
-              [
-                "import _default from \\"react\\";
-              function SrcPagesId() {
-                return <p>Hello</p>;
-              }
-              function DefaultExportRenamedByElacca(props) {
-                const [isMounted, setIsMounted] = _default.useState(false);
-                _default.useEffect(() => {
-                  setIsMounted(true);
-                }, []);
-                return isMounted ? _default.createElement(SrcPagesId, props) : null;
-              }
-              export default DefaultExportRenamedByElacca;
-              ",
-                "function SrcPagesId() {
-                return <p>Hello</p>;
-              }
-              function DefaultExportRenamedByElacca() {
-                return null;
-              }
-              export default DefaultExportRenamedByElacca;
-              ",
-              ]
-            `)
+      [
+        "import _default from \\"react\\";
+      function SrcPagesId() {
+        return <p>Hello</p>;
+      }
+      function DefaultExportRenamedByElacca(props) {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
+    `)
 })
 test('export named class', () => {
     const opts = {

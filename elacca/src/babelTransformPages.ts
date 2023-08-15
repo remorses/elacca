@@ -77,17 +77,26 @@ function removeDefaultExport({
         defaultExportName = node.declaration.name
         defaultDecl.remove()
 
-        // if (isServer) {
-        //     let nodeToRemove = body.find((path) => {
-        //         if (types.isFunctionDeclaration(path.node)) {
-        //             return path.node.id?.name === defaultExportName
-        //         }
-        //     })
-        //     if (nodeToRemove) {
-        //         logger.log(`removing func decl ${defaultExportName}`)
-        //         nodeToRemove.remove()
-        //     }
-        // }
+        if (isServer) {
+            let nodeToRemove = body.find((path) => {
+                if (types.isFunctionDeclaration(path.node)) {
+                    return path.node.id?.name === defaultExportName
+                }
+                // if (
+                //     types.isVariableDeclaration(path.node) &&
+                //     path.node.declarations.length === 1
+                // ) {
+                //     const decl = path.node.declarations[0]
+                //     if (types.isIdentifier(decl.id)) {
+                //         return decl.id.name === defaultExportName
+                //     }
+                // }
+            })
+            if (nodeToRemove) {
+                logger.log(`removing func decl ${defaultExportName}`)
+                nodeToRemove.remove()
+            }
+        }
     } else if (
         types.isFunctionDeclaration(node.declaration) &&
         node.declaration.id
@@ -95,7 +104,7 @@ function removeDefaultExport({
         defaultExportName = node.declaration.name
         defaultExportName = node.declaration.id.name
         if (isServer) {
-            // defaultDecl.remove()
+            defaultDecl.remove()
         } else {
             defaultDecl.replaceInline(node.declaration)
         }
