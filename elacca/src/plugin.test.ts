@@ -55,12 +55,12 @@ test('normal arrow function, export default later', () => {
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
@@ -91,12 +91,12 @@ test('normal arrow function, already imports react', () => {
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
@@ -125,12 +125,12 @@ test('function declaration, export later', () => {
         return <p>Hello</p>;
       }
       ;
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
@@ -158,12 +158,12 @@ test('export default function declaration', () => {
         return <p>Hello</p>;
       }
       ;
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
@@ -192,12 +192,12 @@ test('export named default', () => {
         return <p>Hello</p>;
       }
       ;
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
+        return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
@@ -242,12 +242,12 @@ test('export class after', () => {
 
       import _default from \\"react\\";
       class Page extends React.Component {}
-      function DefaultExportRenamedByElacca() {
+      function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
           setIsMounted(true);
         }, []);
-        return isMounted ? _default.createElement(Page) : null;
+        return isMounted ? _default.createElement(Page, props) : null;
       }
       export default DefaultExportRenamedByElacca;"
     `)
