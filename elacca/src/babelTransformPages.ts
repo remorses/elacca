@@ -68,18 +68,6 @@ export function getConfigObject(
     return null
 }
 
-function codeToAst(code: string) {
-    return parse(code, { sourceType: 'module' }).program.body[0]['expression']
-}
-
-function isElacca(code: string) {
-    // https://regex101.com/r/Wm6UvV/1
-    return /^("|')skip ssr("|')(;?)\n/m.test(code)
-}
-function isClientComponent(code: string) {
-    // https://regex101.com/r/Wm6UvV/1
-    return /^("|')use client("|')(;?)\n/m.test(code)
-}
 
 const defaultExportName = 'DefaultExportRenamedByElacca'
 
@@ -252,7 +240,8 @@ export default function (
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
 
-                if (!testing && shouldBeSkipped(filePath)) {
+                if (shouldBeSkipped(filePath)) {
+                    console.log('skipping because not a page', filePath)
                     return
                 }
 
@@ -265,6 +254,16 @@ export default function (
                 )
                 if (!exportDefaultDeclaration) {
                     console.log('no default export, skipping')
+                    return
+                }
+
+                console.log(program.directives)
+                if (
+                    !program.node.directives?.find(
+                        (x) => x.value.value === 'skip ssr',
+                    )
+                ) {
+                    console.log('no skip ssr, skipping')
                     return
                 }
 

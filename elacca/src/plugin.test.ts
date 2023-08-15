@@ -35,20 +35,23 @@ function runPlugin(
 test('normal arrow function, export default later', () => {
     const opts = {
         cwd: '/a/b/c',
-        filename: '/a/b/c/src/pages/[id].tsx',
+        filename: '/pages/index.tsx',
     }
     expect(
         runPlugin(
             `
-        const SrcPagesId = () => {
-            return <p>Hello</p>;
-        };
-        export default SrcPagesId;
+            "skip ssr"
+            const SrcPagesId = () => {
+                return <p>Hello</p>;
+            };
+            export default SrcPagesId;
   `,
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "import _default from \\"react\\";
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
@@ -66,11 +69,12 @@ test('normal arrow function, export default later', () => {
 test('normal arrow function, already imports react', () => {
     const opts = {
         cwd: '/a/b/c',
-        filename: '/a/b/c/src/pages/[id].tsx',
+        filename: '/pages/index.tsx',
     }
     expect(
         runPlugin(
             `
+        "skip ssr"
         import React from 'react'
         const SrcPagesId = () => {
             return <p>Hello</p>;
@@ -80,7 +84,9 @@ test('normal arrow function, already imports react', () => {
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "import _default from \\"react\\";
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       import React from 'react';
       const SrcPagesId = () => {
         return <p>Hello</p>;
@@ -98,20 +104,23 @@ test('normal arrow function, already imports react', () => {
 test('function declaration, export later', () => {
     const opts = {
         cwd: '/a/b/c',
-        filename: '/a/b/c/src/pages/[id].tsx',
+        filename: '/pages/index.tsx',
     }
     expect(
         runPlugin(
             `
-        function SrcPagesId() {
-            return <p>Hello</p>;
-        };
-        export default SrcPagesId;
+            "skip ssr"
+            function SrcPagesId() {
+                return <p>Hello</p>;
+            };
+            export default SrcPagesId;
   `,
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "import _default from \\"react\\";
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
@@ -129,19 +138,22 @@ test('function declaration, export later', () => {
 test('export default function declaration', () => {
     const opts = {
         cwd: '/a/b/c',
-        filename: '/a/b/c/src/pages/[id].tsx',
+        filename: '/pages/index.tsx',
     }
     expect(
         runPlugin(
             `
-        export default function SrcPagesId() {
-            return <p>Hello</p>;
-        };
+            "skip ssr"
+            export default function SrcPagesId() {
+                return <p>Hello</p>;
+            };
   `,
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "import _default from \\"react\\";
+      "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
@@ -159,7 +171,7 @@ test('export default function declaration', () => {
 test('export named default', () => {
     const opts = {
         cwd: '/a/b/c',
-        filename: '/a/b/c/src/pages/[id].tsx',
+        filename: '/pages/index.tsx',
     }
     expect(
         runPlugin(
@@ -172,18 +184,10 @@ test('export named default', () => {
             opts,
         ).code,
     ).toMatchInlineSnapshot(`
-      "import _default from \\"react\\";
-      function SrcPagesId() {
+      "function SrcPagesId() {
         return <p>Hello</p>;
       }
       ;
-      function DefaultExportRenamedByElacca() {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId) : null;
-      }
-      export default DefaultExportRenamedByElacca;"
+      export default SrcPagesId;"
     `)
 })
