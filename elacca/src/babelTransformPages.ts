@@ -82,15 +82,15 @@ function removeDefaultExport({
                 if (types.isFunctionDeclaration(path.node)) {
                     return path.node.id?.name === defaultExportName
                 }
-                // if (
-                //     types.isVariableDeclaration(path.node) &&
-                //     path.node.declarations.length === 1
-                // ) {
-                //     const decl = path.node.declarations[0]
-                //     if (types.isIdentifier(decl.id)) {
-                //         return decl.id.name === defaultExportName
-                //     }
-                // }
+                if (
+                    types.isVariableDeclaration(path.node) &&
+                    path.node?.declarations?.length === 1
+                ) {
+                    const decl = path.node.declarations[0]
+                    if (types.isIdentifier(decl.id)) {
+                        return decl.id.name === defaultExportName
+                    }
+                }
             })
             if (nodeToRemove) {
                 logger.log(`removing func decl ${defaultExportName}`)
