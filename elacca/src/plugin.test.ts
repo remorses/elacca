@@ -14,7 +14,13 @@ function runPlugin(
         presets: [],
         plugins: [
             require.resolve('@babel/plugin-syntax-jsx'),
-            [require.resolve('../dist/babelTransformPages'), { testing: true }],
+            [
+                require.resolve('../dist/babelTransformPages'),
+                {
+                    testing: true, //
+                    isServer: false,
+                },
+            ],
         ],
         ...opts,
     })

@@ -292,7 +292,7 @@ export default function (
                         function ${defaultExportName}() {
                             return null
                         }
-                    }`).program.body[0] as any,
+                    `).program.body[0] as any,
                     )
                 } else {
                     program.node.body.push(
