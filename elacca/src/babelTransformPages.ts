@@ -55,21 +55,50 @@ export function getConfigObject(
 }
 
 // https://github.com/blitz-js/babel-plugin-superjson-next/blob/main/src/index.ts#L121C22-L121C22
-function removeDefaultExport(path: NodePath<any>) {
-    const { node } = path
+function removeDefaultExport({
+    program,
+    isServer = false,
+}: {
+    program
+    isServer?: boolean
+}) {
+    const body = program.get('body')
+
+    const defaultDecl = body.find((path) => isExportDefaultDeclaration(path))
+    if (!defaultDecl) {
+        logger.log('no default export, skipping')
+        return
+    }
+    const { node } = defaultDecl
 
     let defaultExportName = ''
 
     if (types.isIdentifier(node.declaration)) {
         defaultExportName = node.declaration.name
-        path.remove()
+        defaultDecl.remove()
+
+        // if (isServer) {
+        //     let nodeToRemove = body.find((path) => {
+        //         if (types.isFunctionDeclaration(path.node)) {
+        //             return path.node.id?.name === defaultExportName
+        //         }
+        //     })
+        //     if (nodeToRemove) {
+        //         logger.log(`removing func decl ${defaultExportName}`)
+        //         nodeToRemove.remove()
+        //     }
+        // }
     } else if (
         types.isFunctionDeclaration(node.declaration) &&
         node.declaration.id
     ) {
         defaultExportName = node.declaration.name
         defaultExportName = node.declaration.id.name
-        path.replaceInline(node.declaration)
+        if (isServer) {
+            // defaultDecl.remove()
+        } else {
+            defaultDecl.replaceInline(node.declaration)
+        }
     } else {
         logger.log(`ignored ${node.declaration.type}`)
     }
@@ -136,6 +165,13 @@ export default function (
 ): babel.PluginObj {
     return {
         visitor: {
+            Directive(path) {
+                const { node } = path
+
+                if (node.value.value === 'skip ssr') {
+                    path.remove()
+                }
+            },
             Program(program, state) {
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
@@ -147,40 +183,22 @@ export default function (
 
                 transformImportExportDefault(program.get('body'))
 
-                const body = program.get('body')
-
-                const exportDefaultDeclaration = body.find((path) =>
-                    isExportDefaultDeclaration(path),
+                const dir = program.node.directives?.find(
+                    (x) => x.value?.value === 'skip ssr',
                 )
-                if (!exportDefaultDeclaration) {
-                    logger.log('no default export, skipping')
-                    return
-                }
-
-                if (
-                    !program.node.directives?.find(
-                        (x) => x.value?.value === 'skip ssr',
-                    )
-                ) {
+                if (!dir) {
                     logger.log('no "skip ssr" directive, skipping')
                     return
                 }
 
-                const pageComponent = removeDefaultExport(
-                    exportDefaultDeclaration,
-                )
+                const pageComponent = removeDefaultExport({
+                    program,
+                    isServer,
+                })
                 if (!pageComponent) {
                     logger.log('no page component name found, skipping')
                     return
                 }
-
-                // add import React from react
-                const reactImport = addNamedImport(
-                    program,
-                    'default',
-                    'react',
-                    {},
-                )
 
                 // add a `export default renamedPage` at the end
                 if (isServer) {
@@ -192,6 +210,13 @@ export default function (
                     `).program.body[0] as any,
                     )
                 } else {
+                    // add import React from react
+                    const reactImport = addNamedImport(
+                        program,
+                        'default',
+                        'react',
+                        {},
+                    )
                     program.node.body?.push(
                         parse(
                             dedent`

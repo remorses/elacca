@@ -1,5 +1,7 @@
 // https://github.com/umijs/umi/blob/3.x/packages/babel-plugin-no-anonymous-default-export/src/index.test.ts
 import { transform } from '@babel/core'
+import { format } from 'prettier'
+import synchronizedPrettier from '@prettier/sync'
 
 import { test, expect } from 'vitest'
 import dedent from 'dedent'
@@ -8,28 +10,38 @@ function runPlugin(
     code: string,
     opts?: { cwd: string; plugins?: any[]; filename: string },
 ) {
-    const res = transform(dedent`${code}`, {
+    const client = transform(dedent`${code}`, {
         babelrc: false,
         sourceType: 'module',
-        presets: [],
         plugins: [
             require.resolve('@babel/plugin-syntax-jsx'),
             [
                 require.resolve('../dist/babelTransformPages'),
                 {
-                    testing: true, //
                     isServer: false,
                 },
             ],
         ],
         ...opts,
-    })
+    })?.code
+    const server = transform(dedent`${code}`, {
+        babelrc: false,
+        sourceType: 'module',
+        plugins: [
+            require.resolve('@babel/plugin-syntax-jsx'),
+            [
+                require.resolve('../dist/babelTransformPages'),
+                {
+                    isServer: true,
+                },
+            ],
+        ],
+        ...opts,
+    })?.code
 
-    if (!res) {
-        throw new Error('plugin failed')
-    }
-
-    return res
+    return [client, server].map((x) =>
+        synchronizedPrettier.format(x || '', { parser: 'acorn' }),
+    )
 }
 
 test('normal arrow function, export default later', () => {
@@ -47,11 +59,10 @@ test('normal arrow function, export default later', () => {
             export default SrcPagesId;
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
+      [
+        "import _default from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
@@ -62,7 +73,17 @@ test('normal arrow function, export default later', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
-      export default DefaultExportRenamedByElacca;"
+      export default DefaultExportRenamedByElacca;
+      ",
+        "const SrcPagesId = () => {
+        return <p>Hello</p>;
+      };
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
     `)
 })
 
@@ -82,12 +103,11 @@ test('normal arrow function, already imports react', () => {
         export default SrcPagesId;
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
-      import React from 'react';
+      [
+        "import _default from \\"react\\";
+      import React from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
@@ -98,7 +118,18 @@ test('normal arrow function, already imports react', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
-      export default DefaultExportRenamedByElacca;"
+      export default DefaultExportRenamedByElacca;
+      ",
+        "import React from \\"react\\";
+      const SrcPagesId = () => {
+        return <p>Hello</p>;
+      };
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
     `)
 })
 test('function declaration, export later', () => {
@@ -116,15 +147,13 @@ test('function declaration, export later', () => {
             export default SrcPagesId;
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
+      [
+        "import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
-      ;
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
@@ -132,7 +161,17 @@ test('function declaration, export later', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
-      export default DefaultExportRenamedByElacca;"
+      export default DefaultExportRenamedByElacca;
+      ",
+        "function SrcPagesId() {
+        return <p>Hello</p>;
+      }
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
     `)
 })
 test('export default function declaration', () => {
@@ -149,15 +188,13 @@ test('export default function declaration', () => {
             };
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
+      [
+        "import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
-      ;
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {
@@ -165,7 +202,14 @@ test('export default function declaration', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
-      export default DefaultExportRenamedByElacca;"
+      export default DefaultExportRenamedByElacca;
+      ",
+        "function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
     `)
 })
 test('export named default', () => {
@@ -183,24 +227,32 @@ test('export named default', () => {
             export { SrcPagesId as default };
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
-      function SrcPagesId() {
-        return <p>Hello</p>;
-      }
-      ;
-      function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
-      }
-      export default DefaultExportRenamedByElacca;"
-    `)
+              [
+                "import _default from \\"react\\";
+              function SrcPagesId() {
+                return <p>Hello</p>;
+              }
+              function DefaultExportRenamedByElacca(props) {
+                const [isMounted, setIsMounted] = _default.useState(false);
+                _default.useEffect(() => {
+                  setIsMounted(true);
+                }, []);
+                return isMounted ? _default.createElement(SrcPagesId, props) : null;
+              }
+              export default DefaultExportRenamedByElacca;
+              ",
+                "function SrcPagesId() {
+                return <p>Hello</p>;
+              }
+              function DefaultExportRenamedByElacca() {
+                return null;
+              }
+              export default DefaultExportRenamedByElacca;
+              ",
+              ]
+            `)
 })
 test('export named class', () => {
     const opts = {
@@ -215,11 +267,14 @@ test('export named class', () => {
             }
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      export class Page extends React.Component {}"
+      [
+        "export class Page extends React.Component {}
+      ",
+        "export class Page extends React.Component {}
+      ",
+      ]
     `)
 })
 test('export class after', () => {
@@ -236,11 +291,10 @@ test('export class after', () => {
             export default Page
   `,
             opts,
-        ).code,
+        ),
     ).toMatchInlineSnapshot(`
-      "\\"skip ssr\\";
-
-      import _default from \\"react\\";
+      [
+        "import _default from \\"react\\";
       class Page extends React.Component {}
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
@@ -249,6 +303,14 @@ test('export class after', () => {
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
       }
-      export default DefaultExportRenamedByElacca;"
+      export default DefaultExportRenamedByElacca;
+      ",
+        "class Page extends React.Component {}
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
     `)
 })
