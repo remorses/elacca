@@ -33,9 +33,7 @@ Full application example in the [example-app](./example-app) folder.
 const { withElacca } = require('elacca')
 
 /** @type {import('next').NextConfig} */
-const config = {
-    reactStrictMode: false,
-}
+const config = {}
 
 const elacca = withElacca({})
 
