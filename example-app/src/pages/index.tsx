@@ -67,4 +67,6 @@ export function getServerSideProps() {
     }
 }
 
+console.log(`index-page-xxx`)
+
 const context = createContext({})

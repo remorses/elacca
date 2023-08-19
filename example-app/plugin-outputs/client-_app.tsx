@@ -2,6 +2,7 @@
 
 import _default from "react";
 import { ChakraProvider } from '@chakra-ui/react';
+import './styles.css';
 import type { AppProps } from 'next/app';
 function MyApp({
   Component,

@@ -49,6 +49,19 @@ export function withElacca(config: PluginOptions = {}) {
                                         ),
                                         { isTSX: true },
                                     ],
+
+                                    [
+                                        require.resolve(
+                                            '../dist/babelRemoveUnusedImports',
+                                        ),
+                                        opts,
+                                    ],
+                                    [
+                                        require.resolve(
+                                            '../dist/babelDebugOutputs',
+                                        ),
+                                        opts,
+                                    ],
                                 ].filter(Boolean),
                             },
                         },

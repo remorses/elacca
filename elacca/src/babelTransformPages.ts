@@ -1,7 +1,6 @@
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
 import annotateAsPure from '@babel/helper-annotate-as-pure'
 
-
 import type { NodePath, PluginPass } from '@babel/core'
 
 import * as babel from '@babel/core'
@@ -12,7 +11,12 @@ import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
 import fs from 'fs'
 import { default as nodePath, default as path } from 'path'
-import { defaultExportName, isReactCall, logger } from './utils'
+import {
+    defaultExportName,
+    elaccaDirective,
+    isReactCall,
+    logger,
+} from './utils'
 
 type Babel = { types: typeof types }
 
@@ -146,7 +150,7 @@ function transformImportExportDefault(paths: NodePath<any>[]) {
     }
 }
 
-function getFileName(state: PluginPass) {
+export function getFileName(state: PluginPass) {
     const { filename, cwd } = state
 
     if (!filename) {
@@ -180,31 +184,24 @@ export default function (
                     annotateAsPure(path)
                 }
             },
-            Directive(path) {
-                const { node } = path
 
-                if (node.value.value === 'skip ssr') {
-                    path.remove()
-                }
-            },
+            // Directive(path) {
+            //     const { node } = path
+
+            //     if (node.value.value === elaccaDirective) {
+            //         path.remove()
+            //     }
+            // },
             Program(program, state) {
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
 
-                if (shouldBeSkipped(filePath)) {
+                if (shouldBeSkipped(filePath, program)) {
                     logger.log('skipping because not a page', filePath)
                     return
                 }
 
                 transformImportExportDefault(program.get('body'))
-
-                const dir = program.node.directives?.find(
-                    (x) => x.value?.value === 'skip ssr',
-                )
-                if (!dir) {
-                    logger.log('no "skip ssr" directive, skipping')
-                    return
-                }
 
                 const pageComponent = removeDefaultExport({
                     program,
@@ -252,25 +249,6 @@ export default function (
                         types.identifier(defaultExportName),
                     ),
                 )
-
-                if (process.env.DEBUG_ELACCA) {
-                    // stringify the AST and print it
-                    const output = generate(
-                        program.node,
-                        {
-                            /* options */
-                        },
-                        // @ts-expect-error
-                        this.file.code,
-                    )
-                    let p = path.resolve(
-                        './plugin-outputs',
-                        (isServer ? 'server-' : 'client-') +
-                            path.basename(filePath),
-                    )
-                    fs.mkdirSync(path.dirname(p), { recursive: true })
-                    fs.writeFileSync(p, output.code)
-                }
             },
         },
     }
@@ -285,12 +263,21 @@ const filesToSkip = ([] as string[]).concat(
     ]),
 )
 
-function shouldBeSkipped(filePath: string) {
+export function shouldBeSkipped(filePath: string, program) {
     if (!filePath.includes('pages' + path.sep)) {
         return true
     }
     if (filePath.includes('pages' + path.sep + 'api' + path.sep)) {
         return true
     }
-    return filesToSkip.some((fileToSkip) => filePath.includes(fileToSkip))
+    if (filesToSkip.some((fileToSkip) => filePath.includes(fileToSkip))) {
+        return true
+    }
+    const dir = program.node.directives?.find(
+        (x) => x.value?.value === elaccaDirective,
+    )
+    if (!dir) {
+        return true
+    }
+    return false
 }

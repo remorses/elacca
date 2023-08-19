@@ -70,3 +70,5 @@ const PURE_CALLS: [string, Set<string>][] = [
     ],
     ['react-dom', new Set(['createPortal'])],
 ]
+
+export const elaccaDirective = 'skip ssr'

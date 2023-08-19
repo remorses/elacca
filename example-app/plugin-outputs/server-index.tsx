@@ -11,7 +11,8 @@ export function getServerSideProps() {
     }
   };
 }
-const context = createContext({});
+console.log(`index-page-xxx`);
+const context = /*#__PURE__*/createContext({});
 function DefaultExportRenamedByElacca() {
   return null;
 }

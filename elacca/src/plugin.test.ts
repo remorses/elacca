@@ -62,12 +62,16 @@ test('normal arrow function, export default later', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "function DefaultExportRenamedByElacca() {
+        "\\"skip ssr\\";
+
+      function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
@@ -103,13 +107,17 @@ test('normal arrow function, already imports react', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "import React from \\"react\\";
+        "\\"skip ssr\\";
+
+      import React from \\"react\\";
       function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       import React from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
@@ -144,12 +152,16 @@ test('function declaration, export later', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "function DefaultExportRenamedByElacca() {
+        "\\"skip ssr\\";
+
+      function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
@@ -182,12 +194,16 @@ test('export default function declaration', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "function DefaultExportRenamedByElacca() {
+        "\\"skip ssr\\";
+
+      function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
@@ -221,12 +237,16 @@ test('export named default', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "function DefaultExportRenamedByElacca() {
+        "\\"skip ssr\\";
+
+      function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       function SrcPagesId() {
         return <p>Hello</p>;
       }
@@ -258,9 +278,13 @@ test('export named class', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "export class Page extends React.Component {}
+        "\\"skip ssr\\";
+
+      export class Page extends React.Component {}
       ",
-        "export class Page extends React.Component {}
+        "\\"skip ssr\\";
+
+      export class Page extends React.Component {}
       ",
       ]
     `)
@@ -282,13 +306,17 @@ test('export class after', () => {
         ),
     ).toMatchInlineSnapshot(`
       [
-        "class Page extends React.Component {}
+        "\\"skip ssr\\";
+
+      class Page extends React.Component {}
       function DefaultExportRenamedByElacca() {
         return null;
       }
       export default DefaultExportRenamedByElacca;
       ",
-        "import _default from \\"react\\";
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
       class Page extends React.Component {}
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
