@@ -315,7 +315,8 @@ test('export class after', () => {
       ]
     `)
 })
-test('remove dead code', () => {
+
+test('remove dead code 1', () => {
     const opts = {
         cwd: '/a/b/c',
         filename: '/pages/index.tsx',
@@ -356,6 +357,69 @@ test('remove dead code', () => {
       }
       function Page() {
         return unused();
+      }
+      function DefaultExportRenamedByElacca(props) {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(Page, props) : null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
+    `)
+})
+
+test('remove dead code 2', () => {
+    const opts = {
+        cwd: '/a/b/c',
+        filename: '/pages/index.tsx',
+    }
+    expect(
+        runPlugin(
+            `
+          "skip ssr"
+          import Dead from 'dead'
+          function unused() {
+            
+            console.log(<Dead/>)
+          }
+
+          function Page() {
+            unused()
+            return <Providers/>
+          }
+          export default Page
+
+          function Providers() {
+            return <Dead></Dead>
+          }
+`,
+            opts,
+        ),
+    ).toMatchInlineSnapshot(`
+      [
+        "\\"skip ssr\\";
+
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
+      import Dead from \\"dead\\";
+      function unused() {
+        console.log(<Dead />);
+      }
+      function Page() {
+        unused();
+        return <Providers />;
+      }
+      function Providers() {
+        return <Dead></Dead>;
       }
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
