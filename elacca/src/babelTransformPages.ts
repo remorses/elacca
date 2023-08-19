@@ -17,6 +17,7 @@ import {
     isReactCall,
     logger,
 } from './utils'
+import { removeFunctionDependencies } from './babelRemoveUnusedImports'
 
 type Babel = { types: typeof types }
 
@@ -203,15 +204,23 @@ export default function (
 
                 transformImportExportDefault(program.get('body'))
 
-                const pageComponent = removeDefaultExport({
+                const pageComponentName = removeDefaultExport({
                     program,
                     isServer,
                 })
-                if (!pageComponent) {
+                if (!pageComponentName) {
                     logger.log('no page component name found, skipping')
                     return
                 }
 
+                if (isServer) {
+                    removeFunctionDependencies({
+                        name: pageComponentName,
+                        path: program,
+                        state,
+                    })
+                }
+                
                 // add a `export default renamedPage` at the end
                 if (isServer) {
                     program.node.body?.push(
@@ -237,7 +246,7 @@ export default function (
                             ${reactImport.name}.useEffect(() => {
                                 setIsMounted(true)
                             }, [])
-                            return isMounted ? ${reactImport.name}.createElement(${pageComponent}, props) : null
+                            return isMounted ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
                         }
                         `,
                         ).program.body[0] as any,

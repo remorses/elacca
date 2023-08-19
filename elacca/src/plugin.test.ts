@@ -341,11 +341,6 @@ test('remove dead code', () => {
       [
         "\\"skip ssr\\";
 
-      import dead from \\"dead\\";
-      function unused() {
-        dead();
-        console.log(\\"unused\\");
-      }
       function DefaultExportRenamedByElacca() {
         return null;
       }

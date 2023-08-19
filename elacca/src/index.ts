@@ -9,7 +9,7 @@ export type PluginOptions = {}
 export function plugins(opts) {
     return [
         [require.resolve('../dist/babelTransformPages'), opts],
-        [require.resolve('../dist/babelRemoveUnusedImports'), opts],
+        // [require.resolve('../dist/babelRemoveUnusedImports'), opts],
         require.resolve('@babel/plugin-syntax-jsx'),
         [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
 
