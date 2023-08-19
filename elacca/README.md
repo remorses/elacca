@@ -3,7 +3,7 @@
     <br/>
     <br/>
     <h3>elacca</h3>
-    <p>Improve your Next.js app cold start time by 10x</p>
+    <p>Improve your Next.js app cold start time by 10x (maybe, still experimenting)</p>
     <br/>
     <br/>
 </div>
@@ -32,11 +32,8 @@ Full application example in the [example-app](./example-app) folder.
 // next.config.js
 const { withElacca } = require('elacca')
 
-
 /** @type {import('next').NextConfig} */
-const config = {
-    reactStrictMode: false,
-}
+const config = {}
 
 const elacca = withElacca({})
 
