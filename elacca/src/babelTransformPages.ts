@@ -17,7 +17,7 @@ import {
     isReactCall,
     logger,
 } from './utils'
-import { removeFunctionDependencies } from './babelRemoveUnusedImports'
+import { removeFunctionDependencies } from './removeFunctionDependencies'
 
 type Babel = { types: typeof types }
 
@@ -220,7 +220,7 @@ export default function (
                         state,
                     })
                 }
-                
+
                 // add a `export default renamedPage` at the end
                 if (isServer) {
                     program.node.body?.push(
