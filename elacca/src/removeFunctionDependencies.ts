@@ -7,8 +7,6 @@ import * as t from '@babel/types'
 
 type PluginState = {
     refs: Set<NodePath<BabelTypes.Identifier>>
-    isPrerender: boolean
-    isServerProps: boolean
     done: boolean
 }
 
@@ -95,7 +93,7 @@ export function removeFunctionDependencies({
         }
     }
     state.refs = new Set<NodePath<BabelTypes.Identifier>>()
-    
+
     state.done = false
     const isDataIdentifier = (
         thisName: string,
