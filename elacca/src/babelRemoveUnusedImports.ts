@@ -22,7 +22,7 @@ import { getFileName, shouldBeSkipped } from './babelTransformPages'
 
 type Babel = { types: typeof types }
 
-export default function debugOutputsPlugin(
+export default function deadCodeTerminator(
     { types: t }: Babel,
     { apiDir, pagesDir, isServer, testing, basePath }: any,
 ): babel.PluginObj {
@@ -30,75 +30,81 @@ export default function debugOutputsPlugin(
     return {
         visitor: {
             Program(program, state) {
+                console.log('refs', state.refs)
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
 
-                if (!process.env.DEBUG_ELACCA) {
-                    shouldSkip = true
-                    return
-                }
                 if (shouldBeSkipped(filePath, program)) {
                     shouldSkip = true
-                    
+
                     return
                 }
             },
-            ImportDeclaration(path /* :any */) {
-                if (shouldSkip) {
-                    logger.log('skipping import removing')
-                    return
-                }
-                if (path.removed) {
-                    return
-                }
-                const specifiers = path.get('specifiers')
+            // <FunctionDeclaration(path) {
+            //     if (shouldSkip) {
+            //         return
+            //     }
+            //     const { node } = path
+            //     logger.log('FunctionDeclaration', node.id?.name)
+            //     logger.log('FunctionDeclaration', node.body)
+            // },
 
-                // Imports with no specifiers is probably specifically for side effects
-                let shakeDeclaration = specifiers.length > 0
+            // ImportDeclaration(path /* :any */) {
+            //     if (shouldSkip) {
+            //         logger.log('skipping import removing')
+            //         return
+            //     }
+            //     // if (path.removed) {
+            //     //     return
+            //     // }
+            //     const specifiers = path.get('specifiers')
 
-                for (const specifier of specifiers) {
-                    let shakeSpecifier = true
+            //     // Imports with no specifiers is probably specifically for side effects
+            //     let shakeDeclaration = specifiers.length > 0
 
-                    const localPath = specifier.get('local')
-                    const localName = localPath.node.name
-                    // This should not be hardcoded to React and/or improve compat with JSX transform
-                    if (localName === 'React') {
-                        shakeSpecifier = false
-                        shakeDeclaration = false
-                        break
-                    }
-                    const binding = localPath.scope.bindings[localName]
-                    console.log('binding', binding)
-                    if (binding) {
-                        logger.log(`removing binding ${localName}`)
-                        shakeSpecifier = false
-                        shakeDeclaration = false
-                        const refPaths = binding.referencePaths
+            //     for (const specifier of specifiers) {
+            //         let shakeSpecifier = true
 
-                        for (const path of refPaths) {
-                            logger.log(`${localName}`, path)
-                            // const unreachable = isPathCertainlyUnreachable(path)
-                            // if (!unreachable) {
-                            //     shakeSpecifier = false
-                            //     shakeDeclaration = false
-                            // }
-                        }
-                    } else {
-                        // If binding doesn't exist, then this is an indication the import was
-                        // added by a plugin (rather existing than the original source code)
-                        // To be conservative, don't shake in this case.
-                        shakeSpecifier = false
-                        shakeDeclaration = false
-                    }
-                    if (shakeSpecifier) {
-                        specifier.remove()
-                    }
-                }
+            //         const localPath = specifier.get('local')
+            //         const localName = localPath.node.name
+            //         // This should not be hardcoded to React and/or improve compat with JSX transform
+            //         if (localName === 'React') {
+            //             shakeSpecifier = false
+            //             shakeDeclaration = false
+            //             break
+            //         }
+            //         const binding = localPath.scope.bindings[localName]
+            //         // console.log('binding', binding)
+            //         if (binding) {
+            //             logger.log(`removing binding ${localName}`)
+            //             shakeSpecifier = false
+            //             shakeDeclaration = false
+            //             const refPaths = binding.referencePaths
 
-                if (shakeDeclaration) {
-                    path.remove()
-                }
-            },
+            //             for (const path of refPaths) {
+            //                 logger.log(`${localName}`, path)
+            //                 // const unreachable = isPathCertainlyUnreachable(path)
+            //                 // if (!unreachable) {
+            //                 //     shakeSpecifier = false
+            //                 //     shakeDeclaration = false
+            //                 // }
+            //             }
+            //         } else {
+            //             // If binding doesn't exist, then this is an indication the import was
+            //             // added by a plugin (rather existing than the original source code)
+            //             // To be conservative, don't shake in this case.
+            //             shakeSpecifier = false
+            //             shakeDeclaration = false
+            //         }
+            //         if (shakeSpecifier) {
+            //             specifier.remove()
+            //         }
+            //     }
+
+            //     if (shakeDeclaration) {
+            //         path.remove()
+            //     }
+            // },>
         },
     }
 }

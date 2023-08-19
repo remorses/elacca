@@ -5,6 +5,7 @@ import synchronizedPrettier from '@prettier/sync'
 
 import { test, expect } from 'vitest'
 import dedent from 'dedent'
+import { plugins } from '.'
 
 function runPlugin(
     code: string,
@@ -13,29 +14,13 @@ function runPlugin(
     const client = transform(dedent`${code}`, {
         babelrc: false,
         sourceType: 'module',
-        plugins: [
-            require.resolve('@babel/plugin-syntax-jsx'),
-            [
-                require.resolve('../dist/babelTransformPages'),
-                {
-                    isServer: false,
-                },
-            ],
-        ],
+        plugins: plugins({ isServer: false }),
         ...opts,
     })?.code
     const server = transform(dedent`${code}`, {
         babelrc: false,
         sourceType: 'module',
-        plugins: [
-            require.resolve('@babel/plugin-syntax-jsx'),
-            [
-                require.resolve('../dist/babelTransformPages'),
-                {
-                    isServer: true,
-                },
-            ],
-        ],
+        plugins: plugins({ isServer: true }),
         ...opts,
     })?.code
 
@@ -318,6 +303,65 @@ test('export class after', () => {
 
       import _default from \\"react\\";
       class Page extends React.Component {}
+      function DefaultExportRenamedByElacca(props) {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(Page, props) : null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
+    `)
+})
+test('remove dead code', () => {
+    const opts = {
+        cwd: '/a/b/c',
+        filename: '/pages/index.tsx',
+    }
+    expect(
+        runPlugin(
+            `
+            "skip ssr"
+            import dead from 'dead'
+            function unused() {
+              dead()
+              console.log('unused')
+            }
+
+            function Page() {
+              return unused()
+            }
+            export default Page
+  `,
+            opts,
+        ),
+    ).toMatchInlineSnapshot(`
+      [
+        "\\"skip ssr\\";
+
+      import dead from \\"dead\\";
+      function unused() {
+        dead();
+        console.log(\\"unused\\");
+      }
+      function DefaultExportRenamedByElacca() {
+        return null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
+      import dead from \\"dead\\";
+      function unused() {
+        dead();
+        console.log(\\"unused\\");
+      }
+      function Page() {
+        return unused();
+      }
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {

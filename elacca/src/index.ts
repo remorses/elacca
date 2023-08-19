@@ -6,6 +6,17 @@ import { PluginOptions as RpcPluginOptions } from './babelTransformPages'
 
 export type PluginOptions = {}
 
+export function plugins(opts) {
+    return [
+        [require.resolve('../dist/babelTransformPages'), opts],
+        [require.resolve('../dist/babelRemoveUnusedImports'), opts],
+        require.resolve('@babel/plugin-syntax-jsx'),
+        [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
+
+        [require.resolve('../dist/babelDebugOutputs'), opts],
+    ].filter(Boolean)
+}
+
 export function withElacca(config: PluginOptions = {}) {
     return (nextConfig: NextConfig = {}): NextConfig => {
         return {
@@ -35,34 +46,7 @@ export function withElacca(config: PluginOptions = {}) {
                             loader: 'babel-loader',
                             options: {
                                 sourceMaps: dev,
-                                plugins: [
-                                    [
-                                        require.resolve(
-                                            '../dist/babelTransformPages',
-                                        ),
-                                        opts,
-                                    ],
-                                    require.resolve('@babel/plugin-syntax-jsx'),
-                                    [
-                                        require.resolve(
-                                            '@babel/plugin-syntax-typescript',
-                                        ),
-                                        { isTSX: true },
-                                    ],
-
-                                    [
-                                        require.resolve(
-                                            '../dist/babelRemoveUnusedImports',
-                                        ),
-                                        opts,
-                                    ],
-                                    [
-                                        require.resolve(
-                                            '../dist/babelDebugOutputs',
-                                        ),
-                                        opts,
-                                    ],
-                                ].filter(Boolean),
+                                plugins: plugins(opts),
                             },
                         },
                     ],
