@@ -1,5 +1,11 @@
 # elacca
 
+## 0.2.0
+
+### Minor Changes
+
+-   Added elacca-outputs folder in debug mode, removed a log, resolve babel-loader from plugin node_modules
+
 ## 0.1.1
 
 ### Patch Changes
