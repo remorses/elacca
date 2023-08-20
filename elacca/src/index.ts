@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import type * as webpack from 'webpack'
 import { NextConfig } from 'next'
-import { PluginOptions as RpcPluginOptions } from './babelTransformPages'
+import { PluginOptions as ElaccaPluginOptions } from './babelTransformPages'
 
 export type PluginOptions = {}
 
@@ -27,7 +27,7 @@ export function withElacca(config: PluginOptions = {}) {
                 const pagesDir = findPagesDir(dir)
                 const apiDir = path.resolve(pagesDir, './api')
 
-                const opts: RpcPluginOptions = {
+                const opts: ElaccaPluginOptions = {
                     isServer,
                     pagesDir,
                     dev,
@@ -44,7 +44,7 @@ export function withElacca(config: PluginOptions = {}) {
                     use: [
                         options.defaultLoaders.babel,
                         {
-                            loader: 'babel-loader',
+                            loader: require.resolve('babel-loader'),
                             options: {
                                 sourceMaps: dev,
                                 plugins: plugins(opts),

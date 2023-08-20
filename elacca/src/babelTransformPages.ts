@@ -118,7 +118,7 @@ function removeDefaultExport({
         logger.log(`ignored ${node.declaration.type}`)
     }
 
-    logger.log({ defaultExportName })
+    logger.log(`transformed default export`, defaultExportName)
     return defaultExportName
 }
 
@@ -159,7 +159,7 @@ export function getFileName(state: PluginPass) {
     }
 
     if (cwd && filename.startsWith(cwd)) {
-        return filename.slice(cwd.length)
+        return filename.slice(cwd.length + 1)
     }
 
     return filename

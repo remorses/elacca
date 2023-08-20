@@ -22,10 +22,23 @@ import { getFileName, shouldBeSkipped } from './babelTransformPages'
 
 type Babel = { types: typeof types }
 
+let deletedDir = false
+
 export default function debugOutputsPlugin(
     { types: t }: Babel,
-    { apiDir, pagesDir, isServer, testing, basePath }: any,
+    { apiDir, pagesDir, isServer, basePath }: any,
 ): babel.PluginObj {
+    const cwd = process.cwd()
+    if (!process.env.DEBUG_ELACCA) {
+        return
+    }
+    if (!deletedDir) {
+        deletedDir = true
+        try {
+            fs.rmdirSync('./elacca-outputs', { recursive: true })
+        } catch {}
+        fs.mkdirSync('./elacca-outputs', { recursive: true })
+    }
     return {
         visitor: {
             Program: {
@@ -52,10 +65,11 @@ export default function debugOutputsPlugin(
                         this.file.code,
                     )
                     let p = path.resolve(
-                        './plugin-outputs',
-                        (isServer ? 'server-' : 'client-') +
-                            path.basename(filePath),
+                        './elacca-outputs',
+                        isServer ? 'server/' : 'client/',
+                        path.relative(cwd, path.resolve(filePath)),
                     )
+                    logger.log(`plugin output:`, p)
                     fs.mkdirSync(path.dirname(p), { recursive: true })
                     fs.writeFileSync(p, output.code)
                 },

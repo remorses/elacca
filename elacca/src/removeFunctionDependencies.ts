@@ -4,6 +4,7 @@ import {
     types as BabelTypes,
 } from 'next/dist/compiled/babel/core'
 import * as t from '@babel/types'
+import { logger } from './utils'
 
 type PluginState = {
     refs: Set<NodePath<BabelTypes.Identifier>>
@@ -99,7 +100,7 @@ export function removeFunctionDependencies({
         thisName: string,
         state: PluginState,
     ): boolean => {
-        console.log('isDataIdentifier', thisName)
+        logger.log('isDataIdentifier', thisName)
         // return true if it is the default export
         return thisName === name
     }
