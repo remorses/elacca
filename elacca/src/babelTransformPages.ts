@@ -1,23 +1,15 @@
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
-import annotateAsPure from '@babel/helper-annotate-as-pure'
 
 import type { NodePath, PluginPass } from '@babel/core'
 
 import * as babel from '@babel/core'
-import generate from '@babel/generator'
 import { parse } from '@babel/parser'
 import * as types from '@babel/types'
 import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
-import fs from 'fs'
 import { default as nodePath, default as path } from 'path'
-import {
-    defaultExportName,
-    elaccaDirective,
-    isReactCall,
-    logger,
-} from './utils'
 import { removeFunctionDependencies } from './removeFunctionDependencies'
+import { defaultExportName, elaccaDirective, logger } from './utils'
 
 type Babel = { types: typeof types }
 
@@ -180,12 +172,6 @@ export default function (
 ): babel.PluginObj {
     return {
         visitor: {
-            CallExpression(path) {
-                if (isReactCall(path)) {
-                    annotateAsPure(path)
-                }
-            },
-
             // Directive(path) {
             //     const { node } = path
 

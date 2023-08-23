@@ -270,7 +270,7 @@ export function removeFunctionDependencies({
     }
     let iterations = 0
 
-    let maxIterations = 50
+    let maxIterations = 20
 
     do {
         ;(path.scope as any).crawl()
