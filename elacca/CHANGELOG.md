@@ -1,5 +1,11 @@
 # elacca
 
+## 0.3.0
+
+### Minor Changes
+
+-   Don't process all files, fix bug uing both webpack include and exclude
+
 ## 0.2.1
 
 ### Patch Changes
