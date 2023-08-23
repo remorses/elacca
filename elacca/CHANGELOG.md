@@ -1,5 +1,11 @@
 # elacca
 
+## 0.3.2
+
+### Patch Changes
+
+-   Fix assignments to page, `Page.isLayout = true` now works
+
 ## 0.3.1
 
 ### Patch Changes
