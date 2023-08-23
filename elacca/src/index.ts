@@ -13,7 +13,10 @@ export function plugins(opts) {
         require.resolve('@babel/plugin-syntax-jsx'),
         [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
 
-        [require.resolve('../dist/babelDebugOutputs'), opts],
+        process.env.DEBUG_ELACCA && [
+            require.resolve('../dist/babelDebugOutputs'),
+            opts,
+        ],
     ].filter(Boolean)
 }
 
