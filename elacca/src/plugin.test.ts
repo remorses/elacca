@@ -67,6 +67,7 @@ test('normal arrow function, export default later', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -114,6 +115,7 @@ test('normal arrow function, already imports react', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -157,6 +159,7 @@ test('function declaration, export later', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -199,6 +202,7 @@ test('export default function declaration', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -242,6 +246,7 @@ test('export named default', () => {
         }, []);
         return isMounted ? _default.createElement(SrcPagesId, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -310,6 +315,7 @@ test('export class after', () => {
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -365,6 +371,7 @@ test('remove dead code 1', () => {
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -428,6 +435,7 @@ test('remove dead code 2', () => {
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
       ",
       ]
@@ -477,6 +485,7 @@ test('page component references and mutations work', () => {
         }, []);
         return isMounted ? _default.createElement(Page, props) : null;
       }
+      Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
       ",
       ]

@@ -241,8 +241,12 @@ export default function (
                             }, [])
                             return isMounted ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
                         }
-                        Object.assign(${defaultExportName}, ${pageComponentName})
                         `,
+                        ).program.body[0] as any,
+                    )
+                    program.node.body?.push(
+                        parse(
+                            dedent`Object.assign(${defaultExportName}, ${pageComponentName})`,
                         ).program.body[0] as any,
                     )
                 }
