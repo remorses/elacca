@@ -268,9 +268,13 @@ export function removeFunctionDependencies({
             }
         }
     }
+    let iterations = 0
+
+    let maxIterations = 50
 
     do {
         ;(path.scope as any).crawl()
+        iterations += 1
         count = 0
 
         path.traverse({
@@ -354,5 +358,5 @@ export function removeFunctionDependencies({
             ImportDefaultSpecifier: sweepImport,
             ImportNamespaceSpecifier: sweepImport,
         })
-    } while (count)
+    } while (count && iterations < maxIterations)
 }
