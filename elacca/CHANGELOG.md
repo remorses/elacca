@@ -1,5 +1,11 @@
 # elacca
 
+## 0.3.1
+
+### Patch Changes
+
+-   Don't run debug plugin if not necessary
+
 ## 0.3.0
 
 ### Minor Changes
