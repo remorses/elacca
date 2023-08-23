@@ -91,7 +91,7 @@ function removeDefaultExport({
                 } else if (types.isClassDeclaration(path.node)) {
                     return path.node.id?.name === defaultExportName
                 } else {
-                    logger.log(`ignored ${path.node.type}`)
+                    logger.log(`ignored ${path?.node?.type}`)
                 }
             })
             if (nodeToRemove) {
@@ -110,7 +110,7 @@ function removeDefaultExport({
             defaultDecl.replaceInline(node.declaration)
         }
     } else {
-        logger.log(`ignored ${node.declaration.type}`)
+        logger.log(`ignored ${node?.declaration?.type}`)
     }
 
     logger.log(`transformed default export`, defaultExportName)
