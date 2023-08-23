@@ -1,5 +1,11 @@
 # elacca
 
+## 0.2.1
+
+### Patch Changes
+
+-   Stop dead code elimination after 50 iterations
+
 ## 0.2.0
 
 ### Minor Changes

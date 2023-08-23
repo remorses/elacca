@@ -55,7 +55,7 @@ export default function Home() {
 
 ## How It Works
 
-To have an intuitive understanding of how this works, you can check out how this plugin transforms your pages in the [example-app/elacca-outputs](./example-app/elacca-outputs) folder.
+To have an intuitive understanding of how this works, you can check out how this plugin transforms pages in the [example-app/elacca-outputs](./example-app/elacca-outputs) folder.
 
 -   When a page has a "skip ssr" directive, this plugin will transform the page code so that
 -   On the server the page renders a component that returns `null`
