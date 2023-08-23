@@ -8,6 +8,4 @@ export const logger = {
     },
 }
 
-export const defaultExportName = 'DefaultExportRenamedByElacca'
-
 export const elaccaDirective = 'skip ssr'

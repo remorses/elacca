@@ -49,10 +49,10 @@ test('normal arrow function, export default later', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function SrcPagesId() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default SrcPagesId;
       ",
         "\\"skip ssr\\";
 
@@ -95,10 +95,10 @@ test('normal arrow function, already imports react', () => {
         "\\"skip ssr\\";
 
       import React from \\"react\\";
-      function DefaultExportRenamedByElacca() {
+      function SrcPagesId() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default SrcPagesId;
       ",
         "\\"skip ssr\\";
 
@@ -139,10 +139,10 @@ test('function declaration, export later', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function SrcPagesId() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default SrcPagesId;
       ",
         "\\"skip ssr\\";
 
@@ -181,10 +181,10 @@ test('export default function declaration', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function SrcPagesId() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default SrcPagesId;
       ",
         "\\"skip ssr\\";
 
@@ -224,10 +224,10 @@ test('export named default', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function SrcPagesId() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default SrcPagesId;
       ",
         "\\"skip ssr\\";
 
@@ -252,6 +252,7 @@ test('export named class', () => {
         cwd: '/a/b/c',
         filename: '/pages/index.tsx',
     }
+    // TODO export named class is ignored for now
     expect(
         runPlugin(
             `
@@ -293,11 +294,10 @@ test('export class after', () => {
       [
         "\\"skip ssr\\";
 
-      class Page extends React.Component {}
-      function DefaultExportRenamedByElacca() {
+      function Page() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default Page;
       ",
         "\\"skip ssr\\";
 
@@ -342,10 +342,10 @@ test('remove dead code 1', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function Page() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default Page;
       ",
         "\\"skip ssr\\";
 
@@ -402,10 +402,10 @@ test('remove dead code 2', () => {
       [
         "\\"skip ssr\\";
 
-      function DefaultExportRenamedByElacca() {
+      function Page() {
         return null;
       }
-      export default DefaultExportRenamedByElacca;
+      export default Page;
       ",
         "\\"skip ssr\\";
 
@@ -421,6 +421,55 @@ test('remove dead code 2', () => {
       function Providers() {
         return <Dead></Dead>;
       }
+      function DefaultExportRenamedByElacca(props) {
+        const [isMounted, setIsMounted] = _default.useState(false);
+        _default.useEffect(() => {
+          setIsMounted(true);
+        }, []);
+        return isMounted ? _default.createElement(Page, props) : null;
+      }
+      export default DefaultExportRenamedByElacca;
+      ",
+      ]
+    `)
+})
+test('page component references and mutations work', () => {
+    const opts = {
+        cwd: '/a/b/c',
+        filename: '/pages/index.tsx',
+    }
+    expect(
+        runPlugin(
+            `
+          "skip ssr"
+          function Page() {
+            unused()
+            return <Providers/>
+          }
+          Page.layout = 'xx'
+          export default Page
+
+`,
+            opts,
+        ),
+    ).toMatchInlineSnapshot(`
+      [
+        "\\"skip ssr\\";
+
+      Page.layout = \\"xx\\";
+      function Page() {
+        return null;
+      }
+      export default Page;
+      ",
+        "\\"skip ssr\\";
+
+      import _default from \\"react\\";
+      function Page() {
+        unused();
+        return <Providers />;
+      }
+      Page.layout = \\"xx\\";
       function DefaultExportRenamedByElacca(props) {
         const [isMounted, setIsMounted] = _default.useState(false);
         _default.useEffect(() => {

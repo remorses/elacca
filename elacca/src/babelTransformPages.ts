@@ -9,7 +9,7 @@ import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
 import { default as nodePath, default as path } from 'path'
 import { removeFunctionDependencies } from './removeFunctionDependencies'
-import { defaultExportName, elaccaDirective, logger } from './utils'
+import { elaccaDirective, logger } from './utils'
 
 type Babel = { types: typeof types }
 
@@ -80,8 +80,7 @@ function removeDefaultExport({
             let nodeToRemove = body.find((path) => {
                 if (types.isFunctionDeclaration(path.node)) {
                     return path.node.id?.name === defaultExportName
-                }
-                if (
+                } else if (
                     types.isVariableDeclaration(path.node) &&
                     path.node?.declarations?.length === 1
                 ) {
@@ -89,6 +88,10 @@ function removeDefaultExport({
                     if (types.isIdentifier(decl.id)) {
                         return decl.id.name === defaultExportName
                     }
+                } else if (types.isClassDeclaration(path.node)) {
+                    return path.node.id?.name === defaultExportName
+                } else {
+                    logger.log(`ignored ${path.node.type}`)
                 }
             })
             if (nodeToRemove) {
@@ -207,6 +210,9 @@ export default function (
                         state,
                     })
                 }
+                let defaultExportName = isServer
+                    ? pageComponentName
+                    : 'DefaultExportRenamedByElacca'
 
                 // add a `export default renamedPage` at the end
                 if (isServer) {
@@ -235,6 +241,7 @@ export default function (
                             }, [])
                             return isMounted ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
                         }
+                        Object.assign(${defaultExportName}, ${pageComponentName})
                         `,
                         ).program.body[0] as any,
                     )
