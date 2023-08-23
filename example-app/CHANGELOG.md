@@ -1,5 +1,12 @@
 # nextjs-app
 
+## 0.1.10
+
+### Patch Changes
+
+-   Updated dependencies
+    -   elacca@0.3.3
+
 ## 0.1.9
 
 ### Patch Changes
