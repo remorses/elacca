@@ -39,8 +39,10 @@ export function withElacca(config: PluginOptions = {}) {
                 config.module.rules = config.module.rules || []
                 config.module.rules.push({
                     test: /\.(tsx|ts|js|mjs|jsx)$/,
-                    include: [pagesDir],
-                    // exclude: [apiDir],
+                    resource: {
+                        and: [pagesDir],
+                        not: [apiDir],
+                    },
                     use: [
                         options.defaultLoaders.babel,
                         {

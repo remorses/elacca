@@ -4,10 +4,12 @@ import _default from "react";
 import { ChakraProvider } from '@chakra-ui/react';
 import './styles.css';
 import type { AppProps } from 'next/app';
+import { someUtil } from '@/utils';
 function MyApp({
   Component,
   pageProps
 }: AppProps) {
+  someUtil();
   return <Component {...pageProps} />;
 }
 function DefaultExportRenamedByElacca(props) {

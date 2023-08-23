@@ -196,6 +196,7 @@ export default function (
             Program(program, state) {
                 const filePath =
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
+                logger.log('transforming', filePath)
 
                 if (shouldBeSkipped(filePath, program)) {
                     logger.log('skipping because not a page', filePath)
