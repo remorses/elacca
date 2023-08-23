@@ -1,5 +1,11 @@
 # elacca
 
+## 0.3.4
+
+### Patch Changes
+
+-   Fix page mutations
+
 ## 0.3.3
 
 ### Patch Changes
