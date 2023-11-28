@@ -8,7 +8,7 @@
     <br/>
 </div>
 
-Reduce your Next.js app server code size by disabling SSR for specific pages.
+Reduce your Next.js app server code size by disabling SSR for specific pages. some change
 
 ## Why
 
