@@ -12,12 +12,10 @@ function MyApp({
   // some
   return <Component {...pageProps} />;
 }
+const identity = () => {};
 function DefaultExportRenamedByElacca(props) {
-  const [isMounted, setIsMounted] = _default.useState(false);
-  _default.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  return isMounted ? _default.createElement(MyApp, props) : null;
+  const isClient = _default.useSyncExternalStore(identity, () => true, () => false);
+  return isClient ? _default.createElement(MyApp, props) : null;
 }
 Object.assign(DefaultExportRenamedByElacca, MyApp);
 export default DefaultExportRenamedByElacca;

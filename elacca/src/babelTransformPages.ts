@@ -149,14 +149,13 @@ function transformImportExportDefault(paths: NodePath<any>[]) {
 
 export interface PluginOptions {
     isServer: boolean
-    
+
     pagesDir: string
-    
 }
 
 export default function (
     { types: t }: Babel,
-    { pagesDir, isServer,  }: PluginOptions,
+    { pagesDir, isServer }: PluginOptions,
 ): babel.PluginObj {
     return {
         visitor: {
@@ -217,17 +216,15 @@ export default function (
                         {},
                     )
                     program.node.body?.push(
-                        parse(
+                        ...parse(
                             dedent`
+                        const identity = () => {}
                         function ${defaultExportName}(props) {
-                            const [isMounted, setIsMounted] = ${reactImport.name}.useState(false)
-                            ${reactImport.name}.useEffect(() => {
-                                setIsMounted(true)
-                            }, [])
-                            return isMounted ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
+                            const isClient = ${reactImport.name}.useSyncExternalStore(identity, () => true, () => false)
+                            return isClient ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
                         }
                         `,
-                        ).program.body[0] as any,
+                        ).program.body,
                     )
                     program.node.body?.push(
                         parse(
