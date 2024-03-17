@@ -1,5 +1,11 @@
 # elacca
 
+## 0.5.1
+
+### Patch Changes
+
+-   Added missing dep dedent
+
 ## 0.5.0
 
 ### Minor Changes
