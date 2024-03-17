@@ -1,5 +1,11 @@
 # elacca
 
+## 0.5.0
+
+### Minor Changes
+
+-   Use useSyncExternalStore to track if isClient or isServer
+
 ## 0.4.1
 
 ### Patch Changes
