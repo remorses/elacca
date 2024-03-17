@@ -10,7 +10,7 @@ import { isExportDefaultDeclaration } from '@babel/types'
 import dedent from 'dedent'
 import { default as nodePath, default as path } from 'path'
 import { removeFunctionDependencies } from './removeFunctionDependencies'
-import { elaccaDirective, logger } from './utils'
+import { elaccaDirective, getFileName, logger } from './utils'
 
 type Babel = { types: typeof types }
 
@@ -145,20 +145,6 @@ function transformImportExportDefault(paths: NodePath<any>[]) {
             }
         }
     }
-}
-
-export function getFileName(state: PluginPass) {
-    const { filename, cwd } = state
-
-    if (!filename) {
-        return undefined
-    }
-
-    if (cwd && filename.startsWith(cwd)) {
-        return filename.slice(cwd.length + 1)
-    }
-
-    return filename
 }
 
 export interface PluginOptions {

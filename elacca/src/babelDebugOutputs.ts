@@ -3,8 +3,8 @@ import generate from '@babel/generator'
 import * as types from '@babel/types'
 import fs from 'fs'
 import { default as nodePath, default as path } from 'path'
-import { getFileName, shouldBeSkipped } from './babelTransformPages'
-import { logger } from './utils'
+import { shouldBeSkipped } from './babelTransformPages'
+import { getFileName, logger } from './utils'
 
 type Babel = { types: typeof types }
 
