@@ -1,5 +1,11 @@
 # elacca
 
+## 0.4.1
+
+### Patch Changes
+
+-   Support multiple loaders, chain plugins
+
 ## 0.4.0
 
 ### Minor Changes
