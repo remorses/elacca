@@ -1,5 +1,11 @@
 # elacca
 
+## 0.4.0
+
+### Minor Changes
+
+-   Added support for --turbo, requires latest next canary
+
 ## 0.3.4
 
 ### Patch Changes

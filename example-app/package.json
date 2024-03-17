@@ -1,9 +1,9 @@
 {
     "name": "nextjs-app",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "private": true,
     "scripts": {
-        "dev": "rm -rf .next && DEBUG_ELACCA=1 next dev --turbo -p 3434",
+        "dev": "rm -rf .next && DEBUG_ELACCA=1 next dev -p 3434",
         "build": "rm -rf .next && DEBUG_ELACCA=1 next build",
         "start": "next start",
         "lint": "next lint"

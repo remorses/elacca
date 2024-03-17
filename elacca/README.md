@@ -3,7 +3,7 @@
     <br/>
     <br/>
     <h3>elacca</h3>
-    <p>Improve your Next.js app cold start time by 10x (maybe, still experimenting)</p>
+    <p>Improve your Next.js app cold start time and server load</p>
     <br/>
     <br/>
 </div>
@@ -57,7 +57,7 @@ export default function Home() {
 
 To have an intuitive understanding of how this works, you can check out how this plugin transforms pages in the [example-app/elacca-outputs](./example-app/elacca-outputs) folder.
 
--   When a page has a "skip ssr" directive, this plugin will transform the page code so that
+-   When a page has a "skip ssr" directive, this plugin will transform the page code
 -   On the server the page renders a component that returns `null`
 -   On the client the page renders null until the component mounts, removing the need to hydrate the page
 -   This is implemented as a babel plugin that only runs on pages files, so your build should remain fast (all other files are not parsed by babel, usually the code inside the pages folder is not much)
