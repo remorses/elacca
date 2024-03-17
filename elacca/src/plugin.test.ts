@@ -95,7 +95,6 @@ test('normal arrow function, already imports react', () => {
       [
         "\\"skip ssr\\";
 
-      import React from \\"react\\";
       function SrcPagesId() {
         return null;
       }
