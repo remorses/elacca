@@ -218,9 +218,9 @@ export default function (
                     program.node.body?.push(
                         ...parse(
                             dedent`
-                        const identity = () => {}
+                        const __identityFunction = () => {}
                         function ${defaultExportName}(props) {
-                            const isClient = ${reactImport.name}.useSyncExternalStore(identity, () => true, () => false)
+                            const isClient = ${reactImport.name}.useSyncExternalStore(__identityFunction, () => true, () => false)
                             return isClient ? ${reactImport.name}.createElement(${pageComponentName}, props) : null
                         }
                         `,

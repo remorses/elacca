@@ -54,9 +54,9 @@ export function getServerSideProps() {
   };
 }
 const context = createContext({});
-const identity = () => {};
+const __identityFunction = () => {};
 function DefaultExportRenamedByElacca(props) {
-  const isClient = _default.useSyncExternalStore(identity, () => true, () => false);
+  const isClient = _default.useSyncExternalStore(__identityFunction, () => true, () => false);
   return isClient ? _default.createElement(HeavyComponent, props) : null;
 }
 Object.assign(DefaultExportRenamedByElacca, HeavyComponent);
