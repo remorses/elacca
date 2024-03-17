@@ -95,7 +95,7 @@ function applyTurbopackOptions(nextConfig: NextConfig): void {
     const pagesDir = findPagesDir(process.cwd())
     const globs = [ '{./src/pages,./pages/}/**/*.{ts,tsx,js,jsx}']
     for (const glob of globs) {
-        // @ts-expect-error
+        // @ts-expect-error as is required while it should not, it breaks imports
         rules[glob] = {
             browser: {
                 // as: 'browser',
