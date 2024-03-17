@@ -1,5 +1,11 @@
 # elacca
 
+## 0.5.2
+
+### Patch Changes
+
+-   Rename identity function to prevent clashes
+
 ## 0.5.1
 
 ### Patch Changes
