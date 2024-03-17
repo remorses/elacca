@@ -10,13 +10,15 @@ export default async function (
     source: string,
     map: any,
 ) {
+    if (typeof map === 'string') {
+        map = JSON.parse(map)
+    }
     // eslint-disable-next-line no-console
     // console.log(JSON.stringify(this, null, 2))
     const callback = this.async()
 
     try {
         const skip = async () => {
-            
             const res = await esbuildTransform(source, {
                 loader: 'tsx',
                 sourcefile: this.resourcePath,
@@ -66,8 +68,6 @@ export default async function (
         callback(e)
     }
 }
-
-
 
 export type LoaderThis<Options> = {
     /**

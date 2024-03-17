@@ -15,9 +15,7 @@ export default function debugOutputsPlugin(
     { apiDir, pagesDir, isServer, basePath }: any,
 ): babel.PluginObj | undefined {
     const cwd = process.cwd()
-    if (!process.env.DEBUG_ELACCA) {
-        return
-    }
+    
     if (!deletedDir) {
         deletedDir = true
         

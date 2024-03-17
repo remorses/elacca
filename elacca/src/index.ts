@@ -93,34 +93,20 @@ function applyTurbopackOptions(nextConfig: NextConfig): void {
     const rules = nextConfig.experimental.turbo.rules
 
     const pagesDir = findPagesDir(process.cwd())
-    const globs = [ '{./src/pages,./pages/}/**/*.{ts,tsx,js,jsx}']
-    for (const glob of globs) {
-        // @ts-expect-error as is required while it should not, it breaks imports
-        rules[glob] = {
-            browser: {
-                // as: 'browser',
-                loaders: [
-                    {
-                        loader: require.resolve('../dist/turbopackLoader'),
-                        options: {
-                            isServer: false,
-                            pagesDir,
-                        },
-                    },
-                ],
-            },
-            default: {
-                // as: 'default',
-                loaders: [
-                    {
-                        loader: require.resolve('../dist/turbopackLoader'),
-                        options: {
-                            isServer: true,
-                            pagesDir,
-                        },
-                    },
-                ],
-            },
-        }
-    }
+    const options = { pagesDir }
+    const glob = '{./src/pages,./pages/}/**/*.{ts,tsx,js,jsx}'
+    rules[glob] ??= {}
+    const globbed: any = rules[glob]
+    globbed.browser ??= {}
+    globbed.browser.loaders ??= []
+    globbed.browser.loaders.push({
+        loader: require.resolve('../dist/turbopackLoader'),
+        options: { ...options, isServer: false },
+    })
+    globbed.default ??= {}
+    globbed.default.loaders ??= []
+    globbed.default.loaders.push({
+        loader: require.resolve('../dist/turbopackLoader'),
+        options: { ...options, isServer: true },
+    })
 }
