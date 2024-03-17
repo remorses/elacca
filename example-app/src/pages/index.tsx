@@ -22,6 +22,7 @@ export default function HeavyComponent({ hello }) {
     return (
         <ChakraProvider>
             <div className='w-[600px]'>
+                hello
                 <div className=''>
                     <Select placeholder='Select option'>
                         <option value='option1'>Option 1</option>
@@ -67,6 +68,6 @@ export function getServerSideProps() {
     }
 }
 
-console.log(`index-page-xxx`)
+
 
 const context = createContext({})

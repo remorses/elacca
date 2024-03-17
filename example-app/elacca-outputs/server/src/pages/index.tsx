@@ -1,6 +1,5 @@
 'skip ssr';
 
-import React from 'react';
 import { createContext } from 'react';
 export function getServerSideProps() {
   return {
@@ -9,9 +8,8 @@ export function getServerSideProps() {
     }
   };
 }
-console.log(`index-page-xxx`);
-const context = /*#__PURE__*/createContext({});
-function DefaultExportRenamedByElacca() {
+const context = createContext({});
+function HeavyComponent() {
   return null;
 }
-export default DefaultExportRenamedByElacca;
+export default HeavyComponent;

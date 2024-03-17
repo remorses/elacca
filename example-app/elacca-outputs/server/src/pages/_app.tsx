@@ -1,8 +1,7 @@
 'skip ssr';
 
-import { ChakraProvider } from '@chakra-ui/react';
 import './styles.css';
-function DefaultExportRenamedByElacca() {
+function MyApp() {
   return null;
 }
-export default DefaultExportRenamedByElacca;
+export default MyApp;

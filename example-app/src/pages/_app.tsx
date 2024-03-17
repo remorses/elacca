@@ -6,5 +6,7 @@ import { someUtil } from '@/utils'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     someUtil()
+
+    // some
     return <Component {...pageProps} />
 }

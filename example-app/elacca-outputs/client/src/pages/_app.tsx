@@ -1,15 +1,15 @@
 'skip ssr';
 
 import _default from "react";
-import { ChakraProvider } from '@chakra-ui/react';
 import './styles.css';
-import type { AppProps } from 'next/app';
 import { someUtil } from '@/utils';
 function MyApp({
   Component,
   pageProps
-}: AppProps) {
+}) {
   someUtil();
+
+  // some
   return <Component {...pageProps} />;
 }
 function DefaultExportRenamedByElacca(props) {
@@ -19,4 +19,5 @@ function DefaultExportRenamedByElacca(props) {
   }, []);
   return isMounted ? _default.createElement(MyApp, props) : null;
 }
+Object.assign(DefaultExportRenamedByElacca, MyApp);
 export default DefaultExportRenamedByElacca;

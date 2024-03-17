@@ -1,14 +1,10 @@
-
-
 import * as babel from '@babel/core'
 import generate from '@babel/generator'
 import * as types from '@babel/types'
 import fs from 'fs'
 import { default as nodePath, default as path } from 'path'
 import { getFileName, shouldBeSkipped } from './babelTransformPages'
-import {
-    logger
-} from './utils'
+import { logger } from './utils'
 
 type Babel = { types: typeof types }
 
@@ -17,16 +13,14 @@ let deletedDir = false
 export default function debugOutputsPlugin(
     { types: t }: Babel,
     { apiDir, pagesDir, isServer, basePath }: any,
-): babel.PluginObj {
+): babel.PluginObj | undefined {
     const cwd = process.cwd()
     if (!process.env.DEBUG_ELACCA) {
         return
     }
     if (!deletedDir) {
         deletedDir = true
-        try {
-            fs.rmdirSync('./elacca-outputs', { recursive: true })
-        } catch {}
+        
         fs.mkdirSync('./elacca-outputs', { recursive: true })
     }
     return {
@@ -40,7 +34,7 @@ export default function debugOutputsPlugin(
                     if (!process.env.DEBUG_ELACCA) {
                         return
                     }
-                    if (shouldBeSkipped(filePath, program)) {
+                    if (shouldBeSkipped({filePath, program, pagesDir})) {
                         logger.log('skipping because not a page', filePath)
                         return
                     }
@@ -51,7 +45,6 @@ export default function debugOutputsPlugin(
                         {
                             /* options */
                         },
-                        // @ts-expect-error
                         this.file.code,
                     )
                     let p = path.resolve(

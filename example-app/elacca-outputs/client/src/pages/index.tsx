@@ -10,6 +10,7 @@ function HeavyComponent({
 }) {
   return <ChakraProvider>
             <div className='w-[600px]'>
+                hello
                 <div className=''>
                     <Select placeholder='Select option'>
                         <option value='option1'>Option 1</option>
@@ -52,8 +53,7 @@ export function getServerSideProps() {
     }
   };
 }
-console.log(`index-page-xxx`);
-const context = /*#__PURE__*/createContext({});
+const context = createContext({});
 function DefaultExportRenamedByElacca(props) {
   const [isMounted, setIsMounted] = _default.useState(false);
   _default.useEffect(() => {
@@ -61,4 +61,5 @@ function DefaultExportRenamedByElacca(props) {
   }, []);
   return isMounted ? _default.createElement(HeavyComponent, props) : null;
 }
+Object.assign(DefaultExportRenamedByElacca, HeavyComponent);
 export default DefaultExportRenamedByElacca;

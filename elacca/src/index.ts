@@ -2,26 +2,43 @@ import * as path from 'path'
 import * as fs from 'fs'
 import type * as webpack from 'webpack'
 import { NextConfig } from 'next'
-import { PluginOptions as ElaccaPluginOptions } from './babelTransformPages'
+import {
+    PluginOptions as ElaccaPluginOptions,
+    findPagesDir,
+} from './babelTransformPages'
 
 export type PluginOptions = {}
 
-export function plugins(opts) {
+export function plugins(opts: { isServer?: boolean; pagesDir?: string }) {
     return [
         [require.resolve('../dist/babelTransformPages'), opts],
         // [require.resolve('../dist/babelRemoveUnusedImports'), opts],
         require.resolve('@babel/plugin-syntax-jsx'),
-        [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
+        // [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
+        [
+            require.resolve('@babel/plugin-transform-typescript'),
+            { isTSX: true },
+        ],
 
         process.env.DEBUG_ELACCA && [
             require.resolve('../dist/babelDebugOutputs'),
             opts,
         ],
+
+        // require.resolve('@babel/plugin-transform-react-jsx'),
     ].filter(Boolean)
 }
 
 export function withElacca(config: PluginOptions = {}) {
     return (nextConfig: NextConfig = {}): NextConfig => {
+        applyTurbopackOptions(nextConfig)
+        // return nextConfig
+
+        if (process.env.DEBUG_ELACCA) {
+            try {
+                fs.rmdirSync('./elacca-outputs', { recursive: true })
+            } catch {}
+        }
         return {
             ...nextConfig,
 
@@ -33,9 +50,9 @@ export function withElacca(config: PluginOptions = {}) {
                 const opts: ElaccaPluginOptions = {
                     isServer,
                     pagesDir,
-                    dev,
-                    apiDir,
-                    basePath: nextConfig.basePath || '/',
+
+                    // apiDir,
+                    // basePath: nextConfig.basePath || '/',
                 }
 
                 config.module = config.module || {}
@@ -68,23 +85,42 @@ export function withElacca(config: PluginOptions = {}) {
     }
 }
 
-// taken from https://github.com/vercel/next.js/blob/v12.1.5/packages/next/lib/find-pages-dir.ts
-function findPagesDir(dir: string): string {
-    // prioritize ./pages over ./src/pages
-    let curDir = path.join(dir, 'pages')
-    if (fs.existsSync(curDir)) return curDir
+function applyTurbopackOptions(nextConfig: NextConfig): void {
+    nextConfig.experimental ??= {}
+    nextConfig.experimental.turbo ??= {}
+    nextConfig.experimental.turbo.rules ??= {}
 
-    curDir = path.join(dir, 'src/pages')
-    if (fs.existsSync(curDir)) return curDir
+    const rules = nextConfig.experimental.turbo.rules
 
-    // Check one level up the tree to see if the pages directory might be there
-    if (fs.existsSync(path.join(dir, '..', 'pages'))) {
-        throw new Error(
-            'No `pages` directory found. Did you mean to run `next` in the parent (`../`) directory?',
-        )
+    const pagesDir = findPagesDir(process.cwd())
+    const globs = [ '{./src/pages,./pages/}/**/*.{ts,tsx,js,jsx}']
+    for (const glob of globs) {
+        // @ts-expect-error
+        rules[glob] = {
+            browser: {
+                // as: 'browser',
+                loaders: [
+                    {
+                        loader: require.resolve('../dist/turbopackLoader'),
+                        options: {
+                            isServer: false,
+                            pagesDir,
+                        },
+                    },
+                ],
+            },
+            default: {
+                // as: 'default',
+                loaders: [
+                    {
+                        loader: require.resolve('../dist/turbopackLoader'),
+                        options: {
+                            isServer: true,
+                            pagesDir,
+                        },
+                    },
+                ],
+            },
+        }
     }
-
-    throw new Error(
-        "Couldn't find a `pages` directory. Please create one under the project root",
-    )
 }

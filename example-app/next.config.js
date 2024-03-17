@@ -19,7 +19,6 @@ const config = {
     experimental: {
         externalDir: true,
         // serverMinification: false,
-        serverActions: true,
         outputFileTracingExcludes: {
             '*': [
                 '@vercel', //

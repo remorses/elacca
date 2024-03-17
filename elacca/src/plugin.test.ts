@@ -20,7 +20,7 @@ function runPlugin(
     const server = transform(dedent`${code}`, {
         babelrc: false,
         sourceType: 'module',
-        plugins: plugins({ isServer: true }),
+        plugins: plugins({ isServer: true,}),
         ...opts,
     })?.code
 

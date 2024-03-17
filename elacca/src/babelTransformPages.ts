@@ -1,4 +1,5 @@
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
+import fs from 'fs'
 
 import type { NodePath, PluginPass } from '@babel/core'
 
@@ -162,16 +163,14 @@ export function getFileName(state: PluginPass) {
 
 export interface PluginOptions {
     isServer: boolean
-    testing?: string
+    
     pagesDir: string
-    dev: boolean
-    apiDir: string
-    basePath: string
+    
 }
 
 export default function (
     { types: t }: Babel,
-    { apiDir, pagesDir, isServer, testing, basePath }: PluginOptions,
+    { pagesDir, isServer,  }: PluginOptions,
 ): babel.PluginObj {
     return {
         visitor: {
@@ -187,7 +186,7 @@ export default function (
                     getFileName(state) ?? nodePath.join('pages', 'Default.js')
                 logger.log('transforming', filePath)
 
-                if (shouldBeSkipped(filePath, program)) {
+                if (shouldBeSkipped({ filePath, program, pagesDir })) {
                     logger.log('skipping because not a page', filePath)
                     return
                 }
@@ -270,7 +269,7 @@ const filesToSkip = ([] as string[]).concat(
     ]),
 )
 
-export function shouldBeSkipped(filePath: string, program) {
+export function shouldBeSkipped({ pagesDir, filePath, program = null as any }) {
     if (!filePath.includes('pages' + path.sep)) {
         return true
     }
@@ -280,6 +279,15 @@ export function shouldBeSkipped(filePath: string, program) {
     if (filesToSkip.some((fileToSkip) => filePath.includes(fileToSkip))) {
         return true
     }
+    // if outside of pagesDir, skip
+    const abs = path.resolve(filePath)
+    if (pagesDir && !abs.startsWith(pagesDir)) {
+        console.log('skipping', abs, 'because outside of pagesDir', pagesDir)
+        return true
+    }
+    if (!program) {
+        return false
+    }
     const dir = program.node.directives?.find(
         (x) => x.value?.value === elaccaDirective,
     )
@@ -287,4 +295,26 @@ export function shouldBeSkipped(filePath: string, program) {
         return true
     }
     return false
+}
+
+// taken from https://github.com/vercel/next.js/blob/v12.1.5/packages/next/lib/find-pages-dir.ts
+export function findPagesDir(dir: string): string {
+    logger.log('finding pages dir')
+    // prioritize ./pages over ./src/pages
+    let curDir = path.join(dir, 'pages')
+    if (fs.existsSync(curDir)) return curDir
+
+    curDir = path.join(dir, 'src/pages')
+    if (fs.existsSync(curDir)) return curDir
+
+    // Check one level up the tree to see if the pages directory might be there
+    if (fs.existsSync(path.join(dir, '..', 'pages'))) {
+        throw new Error(
+            'No `pages` directory found. Did you mean to run `next` in the parent (`../`) directory?',
+        )
+    }
+
+    throw new Error(
+        "Couldn't find a `pages` directory. Please create one under the project root",
+    )
 }
