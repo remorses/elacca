@@ -12,9 +12,7 @@ export type PluginOptions = {}
 export function plugins(opts: { isServer?: boolean; pagesDir?: string }) {
     return [
         [require.resolve('../dist/babelTransformPages'), opts],
-        // [require.resolve('../dist/babelRemoveUnusedImports'), opts],
         require.resolve('@babel/plugin-syntax-jsx'),
-        // [require.resolve('@babel/plugin-syntax-typescript'), { isTSX: true }],
         [
             require.resolve('@babel/plugin-transform-typescript'),
             { isTSX: true },
@@ -24,8 +22,6 @@ export function plugins(opts: { isServer?: boolean; pagesDir?: string }) {
             require.resolve('../dist/babelDebugOutputs'),
             opts,
         ],
-
-        // require.resolve('@babel/plugin-transform-react-jsx'),
     ].filter(Boolean)
 }
 
