@@ -1,9 +1,8 @@
-import type webpack from 'webpack'
 import { transform } from '@babel/core'
+import type webpack from 'webpack'
 import { plugins } from '.'
-import { logger } from './utils'
-import { transform as esbuildTransform } from 'esbuild'
 import { shouldBeSkipped } from './babelTransformPages'
+import { logger } from './utils'
 
 export default async function (
     this: LoaderThis<any>,
@@ -18,25 +17,12 @@ export default async function (
     const callback = this.async()
 
     try {
-        const skip = async () => {
-            const res = await esbuildTransform(source, {
-                loader: 'tsx',
-                sourcefile: this.resourcePath,
-                jsx: 'preserve',
-                // jsx: 'transform',
-                // jsxDev: true,
-
-                sourcemap: true,
-            })
-            callback(null, res.code, res.map)
-        }
-
         const options = this.getOptions()
         const { isServer, pagesDir } = options
 
         // console.log('isServer', isServer)
         if (shouldBeSkipped({ filePath: this.resourcePath || '', pagesDir })) {
-            await skip()
+            callback(null, source, map)
             return
         }
 
@@ -53,16 +39,7 @@ export default async function (
             // cwd: this.context,
         })
 
-        if (res) {
-            callback(
-                null,
-                res?.code || '',
-                JSON.stringify(res.map) || undefined,
-            )
-        } else {
-            logger.error('no result')
-            await skip()
-        }
+        callback(null, res?.code || '', JSON.stringify(res?.map) || undefined)
     } catch (e: any) {
         logger.error(e)
         callback(e)

@@ -95,12 +95,14 @@ function applyTurbopackOptions(nextConfig: NextConfig): void {
     const globbed: any = rules[glob]
     globbed.browser ??= {}
     globbed.browser.loaders ??= []
+    globbed.browser.as = '*.tsx'
     globbed.browser.loaders.push({
         loader: require.resolve('../dist/turbopackLoader'),
         options: { ...options, isServer: false },
     })
     globbed.default ??= {}
     globbed.default.loaders ??= []
+    globbed.default.as = '*.tsx'
     globbed.default.loaders.push({
         loader: require.resolve('../dist/turbopackLoader'),
         options: { ...options, isServer: true },
