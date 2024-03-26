@@ -60,12 +60,14 @@ test('normal arrow function, export default later', () => {
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(SrcPagesId, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
@@ -102,17 +104,18 @@ test('normal arrow function, already imports react', () => {
       ",
         "\\"skip ssr\\";
 
-      import _default from \\"react\\";
-      import React from \\"react\\";
+      import React, { default as _default } from \\"react\\";
       const SrcPagesId = () => {
         return <p>Hello</p>;
       };
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(SrcPagesId, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
@@ -151,12 +154,14 @@ test('function declaration, export later', () => {
       function SrcPagesId() {
         return <p>Hello</p>;
       }
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(SrcPagesId, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
@@ -194,12 +199,14 @@ test('export default function declaration', () => {
       function SrcPagesId() {
         return <p>Hello</p>;
       }
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(SrcPagesId, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
@@ -238,12 +245,14 @@ test('export named default', () => {
       function SrcPagesId() {
         return <p>Hello</p>;
       }
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(SrcPagesId, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(SrcPagesId, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, SrcPagesId);
       export default DefaultExportRenamedByElacca;
@@ -307,12 +316,14 @@ test('export class after', () => {
 
       import _default from \\"react\\";
       class Page extends React.Component {}
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(Page, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(Page, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
@@ -363,12 +374,14 @@ test('remove dead code 1', () => {
       function Page() {
         return unused();
       }
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(Page, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(Page, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
@@ -427,12 +440,14 @@ test('remove dead code 2', () => {
       function Providers() {
         return <Dead></Dead>;
       }
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(Page, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(Page, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
@@ -477,12 +492,14 @@ test('page component references and mutations work', () => {
         return <Providers />;
       }
       Page.layout = \\"xx\\";
+      const __identityFunction = () => {};
       function DefaultExportRenamedByElacca(props) {
-        const [isMounted, setIsMounted] = _default.useState(false);
-        _default.useEffect(() => {
-          setIsMounted(true);
-        }, []);
-        return isMounted ? _default.createElement(Page, props) : null;
+        const isClient = _default.useSyncExternalStore(
+          __identityFunction,
+          () => true,
+          () => false,
+        );
+        return isClient ? _default.createElement(Page, props) : null;
       }
       Object.assign(DefaultExportRenamedByElacca, Page);
       export default DefaultExportRenamedByElacca;
