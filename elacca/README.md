@@ -10,6 +10,8 @@
 
 Reduce your Next.js app server code size by disabling SSR for specific pages.
 
+> Only works with pages, not app directory
+
 ## Why
 
 -   Improve cold start times in serverless environments
