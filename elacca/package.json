@@ -1,6 +1,6 @@
 {
     "name": "elacca",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -35,6 +35,7 @@
     "dependencies": {
         "@babel/core": "^7.24.3",
         "@babel/helper-annotate-as-pure": "^7.22.5",
+        "@babel/plugin-syntax-jsx": "^7.22.5",
         "@babel/helper-module-imports": "^7.24.3",
         "@babel/parser": "^7.24.1",
         "@babel/plugin-syntax-typescript": "^7.24.1",

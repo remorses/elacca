@@ -1,5 +1,11 @@
 # elacca
 
+## 0.5.4
+
+### Patch Changes
+
+-   Add missing dep
+
 ## 0.5.3
 
 ### Patch Changes
